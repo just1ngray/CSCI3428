@@ -1,0 +1,72 @@
+<!--
+  - Project: Compose an email page.
+  - author: Jay Patel (A00433907),
+  - author: Justin Gray (A00426753),
+  - author: Vitor Jeronimo (A00431599)
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Confirm Your Email</title>
+
+  <!-- Linking of CSS files -->
+  <link rel="stylesheet" href="../styles/bootstrap.css">
+  <link rel="stylesheet" href="../styles/styles.css">
+
+  <!-- Linking of JS files -->
+  <script src="../scripts/jquery.js"></script>
+  <script src="../scripts/emailManager.js"></script>
+  <script src="../scripts/accountManager.js"></script>
+
+  <meta charset="utf-8" name="viewport" content="width=device-width,
+   initial-scale=1.0">
+
+</head>
+
+<body onload="checkHasRoom()">
+
+  <!-- Header Bar -->
+  <header class="input-group-text">COMPOSING</header>
+
+  <!-- Content: forms -->
+  <main>
+    <!-- To Input -->
+    <div class="input-group-text">
+      <label for="email_to" id="email_to_label"
+        onclick='openHelp("email_to_label")'>To</label>
+        <form>
+            <label for="fname">First name:</label><br>
+          </form>
+    </div>
+  </main>
+
+  <!-- Separator -->
+  <footer class="input-group-text"></footer>
+
+  <!-- Buttons -->
+  <section>
+
+    <!--Send Button-->
+    <button id="btn_confirm" class="btn navButton">Confirm</button>
+    <script type="text/javascript">
+        document.getElementById("myButton").onclick = function () {
+            location.href = 'check-cc.html';
+        };
+    </script>
+
+    <!--Cancel Button-->
+    <button id="btn_cancel" class="btn navButton"
+      onclick='goBack()'>Cancel</button>
+
+    <!--Help button-->
+    <button id="btn_help" class="btn navButton"
+      onclick='masterHelp("Compose")'>Help</button>
+
+  </section>
+
+  <script src="../scripts/navigation.js"></script>
+</body>
+
+</html>

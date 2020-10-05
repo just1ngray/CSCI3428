@@ -1,0 +1,90 @@
+<!--
+  - Project: Shows a sent/inbox email, generated with JavaScript.
+  - author: Jay Patel (A00433907),
+  - author: Justin Gray (A00426753),
+  - author: Vitor Jeronimo (A00431599)
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Admin Email System</title>
+
+  <!-- Linking of CSS files-->
+  <link rel="stylesheet" href="../styles/bootstrap.css">
+  <link rel="stylesheet" href="../styles/styles.css">
+
+  <!-- Linking of JS files -->
+  <script src="../scripts/jquery.js"></script>
+  <script src="../scripts/emailManager.js"></script>
+  <script src="../scripts/accountManager.js"></script>
+
+  <meta charset="utf-8" name="viewport" content="width=device-width,
+   initial-scale=1.0">
+
+</head>
+
+<body onload="loadMail()">
+
+  <!-- Header Bar -->
+  <header class="input-group-text" id="title"></header>
+
+  <!-- Content: email information -->
+  <main>
+
+    <!-- From/To Info -->
+    <div class="input-group-text">
+      <label for="non_owner" id="non_owner_type"
+        onclick='openHelp("non_owner_type")'></label>
+      <input class="form-control viewEmailText" id="non_owner" readonly></input>
+    </div>
+
+    <!-- Cc Info -->
+    <div class="input-group-text">
+      <label for="email_cc" id="email_cc_label"
+        onclick='openHelp("email_cc_label")'>Cc</label>
+      <input class="form-control viewEmailText" id="email_cc" readonly></input>
+    </div>
+
+    <!-- Subject Info -->
+    <div class="input-group-text">
+      <label for="email_subject" id="email_subject_label"
+        onclick='openHelp("email_subject_label")'>Subject</label>
+      <input class="form-control viewEmailText" id="email_subject"
+        readonly></input>
+    </div>
+
+    <!-- Email Body Content -->
+    <div class="input-group-text">
+      <label for="email_body" id="email_body_label"
+        onclick='openHelp("email_body_label")'>Body</label>
+      <textarea class="form-control viewEmailText" id="email_body"
+        readonly></textarea>
+    </div>
+
+  </main>
+
+  <!-- Separator -->
+  <footer class="input-group-text"></footer>
+
+  <!-- Buttons -->
+  <section>
+
+    <!-- Reply Button -->
+    <button id="btn_compose" class="btn navButton"
+      onclick='goTo("compose.html")'>Reply</button>
+
+    <!--Back Button-->
+    <button id="btn_back" class="btn navButton" onclick='goBack()'>Back</button>
+
+    <!--Help button-->
+    <button id="btn_help" class="btn navButton"
+      onclick='masterHelp("ViewSent")'>Help</button>
+
+  </section>
+
+  <script src="../scripts/navigation.js"></script>
+</body>
+
+</html>

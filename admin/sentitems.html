@@ -1,0 +1,69 @@
+<!--
+  - Project: A list of all admin sent emails.
+  - author: Jay Patel (A00433907),
+  - author: Justin Gray (A00426753),
+  - author: Vitor Jeronimo (A00431599)
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Admin Email System</title>
+
+  <!-- Linking of CSS files -->
+  <link rel="stylesheet" href="../styles/bootstrap.css">
+  <link rel="stylesheet" href="../styles/styles.css">
+
+  <!-- Linking of JS files -->
+  <script src="../scripts/jquery.js"></script>
+  <script src="../scripts/emailManager.js"></script>
+  <script src="../scripts/accountManager.js"></script>
+
+  <meta charset="utf-8" name="viewport" content="width=device-width,
+    initial-scale=1.0">
+
+</head>
+
+<body>
+
+  <!-- Header Bar -->
+  <header class="input-group-text">SENT ITEMS</header>
+
+  <!-- Content: list of sent items -->
+  <main>
+    <a class="email_title">TO</a>
+    <a class="email_title">SUBJECT</a>
+
+    <!-- Display emails -->
+    <div id="sent_emails"></div>
+    <script>
+      displayMailbox('sent_emails', 'admin', 'sent')
+    </script>
+
+    <br>
+
+  </main>
+
+  <!-- Separator -->
+  <footer class="input-group-text"></footer>
+
+  <!-- Navigation Buttons -->
+  <section>
+    <!--Inbox button-->
+    <button id="btn_inbox" class="btn navButton"
+      onclick='goTo("index.html")'>Inbox</button>
+
+    <!--Compose button-->
+    <button id="btn_compose" class="btn navButton"
+      onclick='goTo("compose.html")'>Compose</button>
+
+    <!--Help button-->
+    <button id="btn_help" class="btn navButton"
+      onclick='masterHelp("SentItems")'>Help</button>
+  </section>
+
+  <script src="../scripts/navigation.js"></script>
+</body>
+
+</html>
