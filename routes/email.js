@@ -1,37 +1,237 @@
 const router = require("express").Router();
 const Email = require("../models/Email");
+const Account = require("../models/Account");
+const mongoose = require("mongoose");
+const auth = require("../middleware/auth");
 
-router.get("/:email_id", async (req, res) => {
-  const email = await Email.findById(req.params.email_id);
-  // if (email === null)
-  //   return res
-  //     .status(404)
-  //     .send(`Email with _id=${req.params.email_id} not found`);
+/**
+ * Send an email to anyone in the system
+ * https://github.com/just1ngray/CSCI3428/wiki/HTTP-Endpoints#post-apiemail-a
+ * @author Justin Gray (A00426753)
+ */
+router.post("/", auth, async (req, res) => {
+  const sender = req.auth.account;
+  const recipient_ids = [];
 
-  // res.send(email);
-  res.send({
-    _id: "AIJKSBDakjsdbnJKBKNL",
-    __v: 1,
+  ["to", "cc", "bcc"]
+    .filter((field) => req.body[field] !== undefined)
+    .forEach((field) => {
+      // fill & modify contact details
+      req.body[field] = req.body[field].map((contact) => fillContact(contact));
+
+      // with new contact details - create a list of recipients
+      req.body[field]
+        .filter((contact) => contact.account)
+        .forEach((contact) => recipient_ids.push(contact.account));
+    });
+
+  const email = new Email({
     date: Date.now(),
-    subject: "Test Subject",
-    body: "Hello,\nThis is the body of the email.\nThanks",
-    from: {
-      name: "Justin",
-      email: "justin@gray.ca",
-      _id: "account_id",
-    },
-    to: [
-      {
-        name: "Nicholas",
-        email: "nick@morash.com",
-        _id: "account_id2",
-      },
-    ],
-    cc: [],
-    bcc: [],
+    subject: req.body.subject,
+    body: req.body.body,
+    from: fillContact({
+      ...req.body.from,
+      account: sender._id,
+    }),
+    to: req.body.to ? req.body.to : [],
+    cc: req.body.cc ? req.body.cc : [],
+    bcc: req.body.bcc ? req.body.bcc : [],
   });
+  email
+    .save()
+    .then(() => {
+      // add to sender sent
+      sender.sent.push({
+        flags: [],
+        email: email._id,
+      });
+      sender.markModified("sent");
+      sender.save();
+
+      // add to recipeint inbox
+      const recipientPromises = [];
+      recipient_ids.forEach((id) =>
+        recipientPromises.push(Account.findById(id))
+      );
+
+      Promise.all(recipientPromises).then((recipients) => {
+        recipients.forEach((account) => {
+          account.inbox.push({
+            flags: [],
+            email: email._id,
+          });
+          account.markModified("inbox");
+          account.save();
+        });
+      });
+
+      res.send(email);
+    })
+    .catch((err) => res.status(400).send(err));
 });
 
-router.post("/", async (req, res) => {});
+/**
+ * Gets a single email document
+ * https://github.com/just1ngray/CSCI3428/wiki/HTTP-Endpoints#get-apiemailemail_id-a
+ * @author Justin Gray (A00426753)
+ */
+router.get("/:email_id", auth, async (req, res) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.email_id))
+    return res.status(400).send(`Invalid email_id ${req.params.email_id}`);
+
+  const email = await Email.findById(req.params.email_id);
+  if (!email)
+    return res
+      .status(404)
+      .send(`Email with _id=${req.params.email_id} not found`);
+
+  const { inbox, sent } = await getEmails(req.auth.account, [
+    req.params.email_id,
+  ]);
+
+  if (inbox.length > 0) {
+    res.send(inbox[0]);
+  } else if (sent.length > 0) {
+    res.send(sent[0]);
+  } else {
+    res.status(403).send("No permission to view.");
+  }
+});
+
+/**
+ * Gets all emails in the account's inbox
+ *
+ * @author Justin Gray (A00426753)
+ */
+router.get("/inbox", auth, async (req, res) => {
+  const email_ids = [];
+  const account = req.auth.account;
+
+  account.inbox.forEach((wrapper) => email_ids.push(wrapper.email));
+  const { inbox } = await getEmails(account, email_ids);
+
+  res.send(inbox);
+});
+
+/**
+ * Gets all emails in the account's sent
+ *
+ * @author Justin Gray (A00426753)
+ */
+router.get("/sent", auth, async (req, res) => {
+  const email_ids = [];
+  const account = req.auth.account;
+
+  account.sent.forEach((wrapper) => email_ids.push(wrapper.email));
+  const { sent } = await getEmails(account, email_ids);
+
+  res.send(sent);
+});
+
+/**
+ * Get a list of specific emails by _id. Delete BCC and add account flags.
+ * @param {Account} account     the account to search for emails in
+ * @param {String[]} email_ids  the email _ids to search for
+ * @returns { Promise<{ inbox: Object[], sent: Object[]; }> }
+ * @author Justin Gray (A00426753)
+ */
+async function getEmails(account, email_ids) {
+  // ensure all are strings
+  const searchIds = email_ids.map((id) => String(id));
+
+  /**
+   * Queries to find the email object, then classifies appropriately.
+   * @param {String} email_id           the _id of the email
+   * @param {"inbox" | "sent"} type     where the email belongs
+   * @param {String[]} flags            account-only flags for the email
+   * @returns Promise<{ type: "inbox" | "sent", email: {...}, flags: String[] }>
+   */
+  function findAndClassify(email_id, type, flags) {
+    return new Promise(async (resolve) => {
+      try {
+        const email = await Email.findById(email_id);
+        if (!email) throw Error();
+
+        resolve({ type, email, flags });
+      } catch {
+        // we could reject, but then we'd have to handle it properly
+        resolve("not found");
+      }
+    });
+  }
+
+  // array of promises - generated by findAndClassify function
+  const queries = [];
+  ["inbox", "sent"].forEach((type) => {
+    account[type]
+      .filter((wrapper) => searchIds.includes(String(wrapper.email)))
+      .forEach((wrapper) =>
+        queries.push(findAndClassify(wrapper.email, type, wrapper.flags))
+      );
+  });
+
+  // when all promises are finished, return the formatted version of the
+  // "findAndClassify" promises
+  return Promise.all(queries).then((classifiedEmails) => {
+    const emails = {
+      inbox: [],
+      sent: [],
+    };
+
+    classifiedEmails
+      .filter((e) => typeof e !== "string") // it's string when DNE
+      .forEach((e) => {
+        delete e.email.bcc;
+        e.email.flags = e.flags;
+        emails[e.type].push(e.email);
+      });
+
+    return emails;
+  });
+}
+
+/**
+ * Fills a contact the best it can. Searches for an account,
+ * and fills missing information if possible.
+ * @param {Object} contact  the contact (name, email) to fill
+ * @returns                 the filled contact
+ * @author Justin Gray (A00426753)
+ */
+async function fillContact(contact) {
+  if (!mongoose.Types.ObjectId.isValid(contact.account))
+    return {
+      name: contact.name,
+      email: contact.email,
+    };
+  const idAccount = await Account.findById(contact.account);
+  const emailAccount = await Account.findOne({ email: contact.email });
+  if (!idAccount && emailAccount)
+    return {
+      name: contact.name,
+      email: contact.email,
+    };
+
+  const names = [contact.name, idAccount.name, emailAccount.name];
+  const emails = [contact.email, idAccount.email, emailAccount.email];
+  const ids = [idAccount._id, emailAccount._id];
+
+  let name = names[0];
+  if (name === undefined) name = names[1];
+  if (name === undefined) name = names[3];
+
+  let email = emails[0];
+  if (email === undefined) email = emails[1];
+  if (email === undefined) email = emails[3];
+
+  let _id = ids[0];
+  if (_id === undefined) _id = ids[1];
+  if (_id === undefined) _id = ids[3];
+
+  return {
+    name,
+    email,
+    account: _id,
+  };
+}
 
 module.exports = router;
