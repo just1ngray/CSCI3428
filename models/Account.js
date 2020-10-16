@@ -22,6 +22,9 @@ const accountSchema = new mongoose.Schema({
     default: undefined,
     required: true,
     unique: true,
+    lowercase: true,
+    trim: true,
+    match: /^.+@.+\..+$/,
   },
   password: String, // bcrypt hashed
   inbox: [
@@ -50,9 +53,9 @@ const accountSchema = new mongoose.Schema({
     default: [],
   },
   child_id: {
-      type: String,
-      maxlength: 128
-  }
+    type: String,
+    maxlength: 128,
+  },
 });
 
 /**
@@ -69,9 +72,9 @@ accountSchema.methods.getAuthToken = function () {
       __v: this.__v,
       name: this.name,
       email: this.email,
-      child_id: this.child_id
+      child_id: this.child_id,
     },
-    "todo_change2_supersecret_key"
+    String(process.env.G2_JWT)
   );
 };
 
