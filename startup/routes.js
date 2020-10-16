@@ -5,6 +5,8 @@
 module.exports = function (app) {
   // route each endpoint to the proper router file
   app.use("/api/email", require("../routes/email"));
+  app.use("/api/account", require("../routes/account"));
+  app.use("/api/specialist", require("../routes/specialist"));
 
   // catch-all for /api calls: prevents from serving next content
   app.use("/api", (req, res) => {
