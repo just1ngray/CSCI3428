@@ -1,17 +1,18 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 
-function TextBox({ label, rows, text, setText }) {
+
+
+function TextBox({ label, rows, text}) {
+  
   return (
     <div>
       <label>{label}</label>
       <textarea
-        readOnly={setText === undefined}
+        readOnly={true}
         rows={rows}
         cols={80}
-        onChange={(element) => setText(element.target.value)}
-      >
-        {text}
-      </textarea>
+        value={text}
+      />
     </div>
   );
 }
