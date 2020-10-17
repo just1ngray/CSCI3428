@@ -9,9 +9,8 @@ function TextBox({ label, rows, text, setText }) {
         rows={rows}
         cols={80}
         onChange={(element) => setText(element.target.value)}
-      >
-        {text}
-      </textarea>
+        value={text}
+      />
     </div>
   );
 }
