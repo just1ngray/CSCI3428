@@ -1,0 +1,77 @@
+/** TODO: LOGIN PAGE 
+ *  Simple button route similar to old app.
+*/
+
+import { useRouter } from 'next/router';
+import CustomButton from "./components/CustomButton";
+import InputTextBox from './components/InputTextBox';
+import PassTextBox from './components/PassTextBox';
+import store from '../store';
+import axios from 'axios';
+
+export default function () {
+  const r = useRouter(); // Routes inside functions.
+
+  function handleRouteClick(route) {
+    r.push(route);
+  }
+
+  async function handleSignIn() {
+    const storeState = store.getState();
+    console.log(storeState)
+    const pword = storeState.pass;
+    const userEmail = storeState.signInEmail;
+    console.log(pword, userEmail);
+   //aconst loginResponse = await axios.post("localhost:3384/api/account/login", {username:userEmail, password: pword});
+    //console.log(loginResponse);
+  }
+
+  return (
+    <div>
+      <div>
+        <InputTextBox label="Email" rows="1" placeholder="Email Address"/>
+        <PassTextBox label="Password:"/>
+        <CustomButton
+            label="Sign In"
+            onClick={() => handleSignIn()}
+            type="button"
+            disabled={false}
+        /> 
+      </div>
+      <div>
+        <span>
+          <CustomButton
+            label="Student"
+            onClick={() => handleRouteClick("/StudentHome")}
+            type="button"
+            disabled={false}
+          />
+          <CustomButton
+            label="Specialist"
+            onClick={() => handleRouteClick("/AdminHome")}
+            type="button"
+            disabled={false}
+          />
+          <CustomButton
+            label="DEBUG: ViewEmail"
+            onClick={() => handleRouteClick("/ViewEmail")}
+            type="button"
+            disabled={false}
+          />          
+          <CustomButton
+          label="DEBUG: Compose"
+          onClick={() => handleRouteClick("/Compose")}
+          type="button"
+          disabled={false}
+        />          
+        <CustomButton
+          label="DEBUG: Reply"
+          onClick={() => handleRouteClick("/Reply")}
+          type="button"
+          disabled={false}
+        />
+        </span>
+      </div>
+    </div>
+  );
+}
