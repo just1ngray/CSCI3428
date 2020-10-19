@@ -78,7 +78,7 @@ router.post("/", auth, async (req, res) => {
 
 /**
  * Gets all emails in the account's inbox
- *
+ * https://github.com/just1ngray/CSCI3428/wiki/HTTP-Endpoints#get-apiemailinbox-a
  * @author Justin Gray (A00426753)
  */
 router.get("/inbox", auth, async (req, res) => {
@@ -93,7 +93,7 @@ router.get("/inbox", auth, async (req, res) => {
 
 /**
  * Gets all emails in the account's sent
- *
+ * https://github.com/just1ngray/CSCI3428/wiki/HTTP-Endpoints#get-apiemailsent-a
  * @author Justin Gray (A00426753)
  */
 router.get("/sent", auth, async (req, res) => {
@@ -131,6 +131,76 @@ router.get("/:email_id", auth, async (req, res) => {
     res.send(sent[0]);
   } else {
     res.status(403).send("No permission to view.");
+  }
+});
+
+/**
+ * Delete an email from an account's 'inbox' | 'sent' (box).
+ * https://github.com/just1ngray/CSCI3428/wiki/HTTP-Endpoints#delete-apiemailboxemail_id-a
+ * @author Justin Gray (A00426753)
+ */
+router.delete("/:box/:email_id", auth, async (req, res) => {
+  const account = req.auth.account;
+
+  // validate parameters
+  if (!["inbox", "sent"].includes(req.params.box))
+    return res
+      .status(400)
+      .send("Incorrect box parameter. Try either 'inbox' or 'sent'.");
+
+  if (!mongoose.Types.ObjectId.isValid(req.params.email_id))
+    return res.status(400).send("Email id parameter is invalid.");
+
+  // find the email
+  const index = account[req.params.box]
+    .map((email) => email.email)
+    .indexOf(req.params.email_id);
+  if (index == -1)
+    return res.status(404).send("Email doesn't exist in your mailbox.");
+
+  const { email_id, flags } = account[req.params.box].splice(index, 1);
+  const email = await Email.findById(email_id);
+
+  // save the account with the email gone
+  account.markModified(req.params.box);
+  account
+    .save()
+    .then(() => {
+      delete email.bcc;
+      // return the email that was just deleted
+      res.send({
+        ...email,
+        flags,
+      });
+    })
+    .catch((err) => {
+      res.status(400).send(err);
+    });
+
+  // delete the email.X.account where applicable, and remove document if
+  // nobody has reference to the email anymore
+  let accountsWithReferenceToEmail = 0;
+  if (email.from.account) {
+    if (String(account._id) === String(email.from.account)) {
+      delete email.from.account;
+      email.markModified("from");
+    } else accountsWithReferenceToEmail++;
+  }
+  ["to", "cc", "bcc"].forEach((list) => {
+    email[list].forEach((contact, index) => {
+      if (contact.account) {
+        if (String(account._id) === String(email.from.account)) {
+          delete email[list][index].account;
+          email.markModified(list);
+        } else accountsWithReferenceToEmail++;
+      }
+    });
+  });
+
+  if (accountsWithReferenceToEmail === 0) {
+    email.remove();
+  } else {
+    email.save();
   }
 });
 
