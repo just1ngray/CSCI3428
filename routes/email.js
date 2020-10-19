@@ -13,89 +13,67 @@ router.post("/", auth, async (req, res) => {
   const sender = req.auth.account;
   const recipient_ids = [];
 
-  ["to", "cc", "bcc"]
-    .filter((field) => req.body[field] !== undefined)
-    .forEach((field) => {
-      // fill & modify contact details
-      req.body[field] = req.body[field].map((contact) => fillContact(contact));
-
-      // with new contact details - create a list of recipients
-      req.body[field]
-        .filter((contact) => contact.account)
-        .forEach((contact) => recipient_ids.push(contact.account));
-    });
-
-  const email = new Email({
-    date: Date.now(),
-    subject: req.body.subject,
-    body: req.body.body,
-    from: fillContact({
-      ...req.body.from,
-      account: sender._id,
-    }),
-    to: req.body.to ? req.body.to : [],
-    cc: req.body.cc ? req.body.cc : [],
-    bcc: req.body.bcc ? req.body.bcc : [],
+  const from = fillContact({
+    ...req.body.from,
+    account: sender._id,
   });
-  email
-    .save()
-    .then(() => {
-      // add to sender sent
-      sender.sent.push({
-        flags: [],
-        email: email._id,
+
+  const to = [];
+  if (req.body.to)
+    req.body.to.forEach((contact) => to.push(fillContact(contact)));
+
+  const cc = [];
+  if (req.body.cc)
+    req.body.cc.forEach((contact) => cc.push(fillContact(contact)));
+
+  const bcc = [];
+  if (req.body.bcc)
+    req.body.bcc.forEach((contact) => bcc.push(fillContact(contact)));
+
+  Promise.all([from, ...to, ...cc, ...bcc])
+    .then((resolved) => {
+      const email = new Email({
+        date: Date.now(),
+        subject: req.body.subject,
+        body: req.body.body,
+        from: resolved[0],
+        to: resolved.slice(1, 1 + to.length),
+        cc: resolved.slice(1 + to.length, 1 + to.length + cc.length),
+        bcc: resolved.slice(1 + to.length + cc.length, resolved.length),
       });
-      sender.markModified("sent");
-      sender.save();
-
-      // add to recipeint inbox
-      const recipientPromises = [];
-      recipient_ids.forEach((id) =>
-        recipientPromises.push(Account.findById(id))
-      );
-
-      Promise.all(recipientPromises).then((recipients) => {
-        recipients.forEach((account) => {
-          account.inbox.push({
+      email
+        .save()
+        .then(() => {
+          // add to sender sent
+          sender.sent.push({
             flags: [],
             email: email._id,
           });
-          account.markModified("inbox");
-          account.save();
-        });
-      });
+          sender.markModified("sent");
+          sender.save();
 
-      res.send(email);
+          // add to recipeint inbox
+          const recipientPromises = [];
+          recipient_ids.forEach((id) =>
+            recipientPromises.push(Account.findById(id))
+          );
+
+          Promise.all(recipientPromises).then((recipients) => {
+            recipients.forEach((account) => {
+              account.inbox.push({
+                flags: [],
+                email: email._id,
+              });
+              account.markModified("inbox");
+              account.save();
+            });
+          });
+
+          res.send(email);
+        })
+        .catch((err) => res.status(400).send(err));
     })
     .catch((err) => res.status(400).send(err));
-});
-
-/**
- * Gets a single email document
- * https://github.com/just1ngray/CSCI3428/wiki/HTTP-Endpoints#get-apiemailemail_id-a
- * @author Justin Gray (A00426753)
- */
-router.get("/:email_id", auth, async (req, res) => {
-  if (!mongoose.Types.ObjectId.isValid(req.params.email_id))
-    return res.status(400).send(`Invalid email_id ${req.params.email_id}`);
-
-  const email = await Email.findById(req.params.email_id);
-  if (!email)
-    return res
-      .status(404)
-      .send(`Email with _id=${req.params.email_id} not found`);
-
-  const { inbox, sent } = await getEmails(req.auth.account, [
-    req.params.email_id,
-  ]);
-
-  if (inbox.length > 0) {
-    res.send(inbox[0]);
-  } else if (sent.length > 0) {
-    res.send(sent[0]);
-  } else {
-    res.status(403).send("No permission to view.");
-  }
 });
 
 /**
@@ -126,6 +104,34 @@ router.get("/sent", auth, async (req, res) => {
   const { sent } = await getEmails(account, email_ids);
 
   res.send(sent);
+});
+
+/**
+ * Gets a single email document
+ * https://github.com/just1ngray/CSCI3428/wiki/HTTP-Endpoints#get-apiemailemail_id-a
+ * @author Justin Gray (A00426753)
+ */
+router.get("/:email_id", auth, async (req, res) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.email_id))
+    return res.status(400).send(`Invalid email_id ${req.params.email_id}`);
+
+  const email = await Email.findById(req.params.email_id);
+  if (!email)
+    return res
+      .status(404)
+      .send(`Email with _id=${req.params.email_id} not found`);
+
+  const { inbox, sent } = await getEmails(req.auth.account, [
+    req.params.email_id,
+  ]);
+
+  if (inbox.length > 0) {
+    res.send(inbox[0]);
+  } else if (sent.length > 0) {
+    res.send(sent[0]);
+  } else {
+    res.status(403).send("No permission to view.");
+  }
 });
 
 /**
@@ -193,7 +199,7 @@ async function getEmails(account, email_ids) {
 /**
  * Fills a contact the best it can. Searches for an account,
  * and fills missing information if possible.
- * @param {Object} contact  the contact (name, email) to fill
+ * @param {Object} contact  the contact (name, email, account?) to fill
  * @returns                 the filled contact
  * @author Justin Gray (A00426753)
  */
@@ -205,27 +211,38 @@ async function fillContact(contact) {
     };
   const idAccount = await Account.findById(contact.account);
   const emailAccount = await Account.findOne({ email: contact.email });
-  if (!idAccount && emailAccount)
+  if (!idAccount && !emailAccount)
     return {
       name: contact.name,
       email: contact.email,
     };
 
-  const names = [contact.name, idAccount.name, emailAccount.name];
-  const emails = [contact.email, idAccount.email, emailAccount.email];
-  const ids = [idAccount._id, emailAccount._id];
+  const names = [
+    contact.name,
+    idAccount ? idAccount.name : undefined,
+    emailAccount ? emailAccount.name : undefined,
+  ];
+  const emails = [
+    contact.email,
+    idAccount ? idAccount.email : undefined,
+    emailAccount ? emailAccount.email : undefined,
+  ];
+  const ids = [
+    idAccount ? idAccount._id : undefined,
+    emailAccount ? emailAccount._id : undefined,
+  ];
 
   let name = names[0];
   if (name === undefined) name = names[1];
-  if (name === undefined) name = names[3];
+  if (name === undefined) name = names[2];
 
   let email = emails[0];
   if (email === undefined) email = emails[1];
-  if (email === undefined) email = emails[3];
+  if (email === undefined) email = emails[2];
 
   let _id = ids[0];
   if (_id === undefined) _id = ids[1];
-  if (_id === undefined) _id = ids[3];
+  if (_id === undefined) _id = ids[2];
 
   return {
     name,
