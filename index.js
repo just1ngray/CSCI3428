@@ -1,43 +1,43 @@
 /**
- * Set up the Next & Express server.
+ * Set up Express server to handle calls to our database.
  * @author Justin Gray (A00426753)
  */
 const express = require("express");
-const next = require("next");
+const app = express();
+const cors = require("cors");
 
-const app = next({
-  dir: "./client",
-});
-const handle = app.getRequestHandler();
-const port = process.env.G2_PORT || 3384;
+const port = process.env.G2_PORT || 3385;
 
-app
-  .prepare()
-  .then(() => {
-    const server = express();
+// express middleware function(s)
+app.use(express.json());
+app.use(cors());
 
-    // express middleware function(s)
-    server.use(express.json());
-
-    // startup functions
-    require("./startup/routes")(server); // setup '/api' routes
-    require("./startup/database")
-      .connect() // connect to MongoDB
-      .then((didConnect) => {
-        if (didConnect) require("./startup/setupAccounts")();
-      });
-
-    // render NextJS react content (generated using 'npm run build')
-    server.get("*", (req, res) => {
-      return handle(req, res);
-    });
-
-    // set the server to listen on the given port
-    server.listen(port, (err) => {
-      if (err) throw err;
-      console.log(`Server listening on port ${port}`);
-    });
-  })
-  .catch((err) => {
-    console.error(err);
+// startup functions
+require("./startup/routes")(app); // setup '/api' routes
+require("./startup/database")
+  .connect() // connect to MongoDB
+  .then((didConnect) => {
+    if (didConnect) require("./startup/setupAccounts")();
   });
+
+/**
+ * Redirect any non-api requests to the front-end NextJS
+ * optimized server.
+ * NextJS can be run with:
+ *      $ npm run build
+ *      $ npm run client
+ * And will be started on port 3384.
+ * @author Justin Gray (A00426753)
+ */
+app.get("*", (req, res) => {
+  res.redirect(301, `${req.hostname}:3384${req.url}`);
+});
+
+/**
+ * Set the server to listen on the given port.
+ * @author Justin Gray (A00426753)
+ */
+app.listen(port, (err) => {
+  if (err) throw err;
+  console.log(`Server listening on port ${port}`);
+});
