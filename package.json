@@ -4,9 +4,9 @@
   "description": "A training email system for Autism NS",
   "main": "index.js",
   "scripts": {
-    "client": "cd client && npm run dev",
     "dev": "cd client && npm run dev",
     "build": "cd client && npm run build",
+    "client": "cd client && npm run start",
     "server": "node index.js"
   },
   "repository": {
