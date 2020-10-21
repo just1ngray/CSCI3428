@@ -11,6 +11,7 @@ module.exports.connect = function () {
       // .connect("mongodb://localhost:27017/softeng", { // can be used instead for a local mongo instance
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      useCreateIndex: true,
     })
     .then(() => {
       console.log("Connected to MongoDB");
