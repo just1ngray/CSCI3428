@@ -7,8 +7,7 @@ const mongoose = require("mongoose");
  */
 module.exports.connect = function () {
   return mongoose
-    .connect("mongodb://group2:grain%40store%4002@127.0.0.1:27017/group2", {
-      // .connect("mongodb://localhost:27017/softeng", { // can be used instead for a local mongo instance
+    .connect(getConnectionString(), {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })
@@ -39,3 +38,18 @@ module.exports.disconnect = function () {
       return false;
     });
 };
+
+/**
+ * Get the connection string depending on the USER environment variable
+ * @returns {String} the appropriate connection string
+ * @author Justin Gray (A00426753)
+ */
+function getConnectionString() {
+  if (process.env.USER == "group2") {
+    // ugdev account
+    return "mongodb://group2:grain%40store%4002@127.0.0.1:27017/group2";
+  } else {
+    // other - probably someone's home computer
+    return "mongodb://localhost:27017/softeng";
+  }
+}
