@@ -1,15 +1,22 @@
+
 import "../styles/globals.css";
-import { Provider } from "react-redux";
-import { useStore } from "../store";
+import "../styles/bulma.css";
 
 function MyApp({ Component, pageProps }) {
-  const store = useStore(pageProps.initialReduxState);
 
-  return (
-    <Provider store={store}>
-      <Component {...pageProps} />
-    </Provider>
+  return(
+  <div style={{backgroundColor: '#a2bdbc'}}>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
+  <body>
+    <section class="section">
+      <div class="container">
+      <Component {...pageProps}/>
+      </div>
+    </section>
+  </body>
+  </div>
   );
 }
 
 export default MyApp;
+
