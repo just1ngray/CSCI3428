@@ -72,7 +72,7 @@ export default function viewEmail() {
 
   function formatBody() {
     try{
-      return email.Body;
+      return email.body;
     }catch{
       return "";
     }
