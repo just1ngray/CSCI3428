@@ -41,21 +41,41 @@ export default function viewEmail() {
   console.log(email)
 
   function formatFrom() {
-    if (email == undefined) return "";
-
-    const name = email.name;
-    const address = email.email;
-    const formatted = name + " (" + address + ")";
-    return formatted;
+    try {
+      const name = email.name;
+      const address = email.email;
+      const formatted = name + " (" + address + ")";
+      return formatted;
+    }catch{
+      return "";
+    }
   }
 
   function formatCC() {
-  //  if (email == undefined) return "";
+    try {
+      const formatted = email.cc
+      // .map((contact) => `${contact.this.name} (${contact.this.email})`)
+      // .join(" ");
+      return formatted;
+    }catch{
+      return "";
+    }
+  }
 
-  //  const formatted = email.cc
-  //    .map((contact) => `${contact.this.name} (${contact.this.email})`)
-  //    .join(" ");
-  //  return formatted;
+  function formatSubject() {
+    try{
+      return email.subject;
+    }catch{
+      return "";
+    }
+  }
+
+  function formatBody() {
+    try{
+      return email.Body;
+    }catch{
+      return "";
+    }
   }
 
   function handleReplyClick() {
@@ -99,12 +119,12 @@ export default function viewEmail() {
         <TextBox
           label="Subject"
           rows="1"
-          text={email !== null ? email.subject : ""}
+          text={formatSubject()}
         />
         <TextBox
           label="Body"
           rows="10"
-          text={email !== null ? email.body : ""}
+          text={formatBody()}
         />
       </div>
       <div>
