@@ -9,8 +9,9 @@ const cors = require("cors");
 const port = process.env.G2_PORT || 3385;
 
 // express middleware function(s)
-app.use(express.json());
 app.use(cors());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // startup functions
 require("./startup/routes")(app); // setup '/api' routes
@@ -33,10 +34,6 @@ app.get("*", (req, res) => {
   res.redirect(301, `${req.hostname}:3384${req.url}`);
 });
 
-/**
- * Set the server to listen on the given port.
- * @author Justin Gray (A00426753)
- */
 app.listen(port, (err) => {
   if (err) throw err;
   console.log(`Server listening on port ${port}`);
