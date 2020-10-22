@@ -2,11 +2,10 @@
  * @author: Bivash Pandey (A00425523)
  */
 import React, { useState } from "react";
-import Tippy from '@tippy.js/react';
-import 'tippy.js/dist/tippy.css';
-import store from '../../store';
+import Tippy from "@tippy.js/react";
+import store from "../../store";
 
-export default function InputTextBox({ label, rows, placeholder, text}) {   
+export default function InputTextBox({ label, rows, placeholder, text }) {
   const [state, setState] = useState(text);
 
   async function handleChange(e) {
@@ -14,41 +13,44 @@ export default function InputTextBox({ label, rows, placeholder, text}) {
     await setState(change);
     store.dispatch({
       type: `set${label}`,
-      payload: change
+      payload: change,
     });
   }
 
-  function handleHelp(helpType){
-    switch(helpType){
-      case "To": 
-        return "Enter the recipient email address here."
-      case "CC": 
-        return "Enter an additional recipient here."
-      case "Subject": 
-        return "Enter a concise subject for your email."
-      case "Body": 
-        return "Compose your message here."
+  function handleHelp(helpType) {
+    switch (helpType) {
+      case "To":
+        return "Enter the recipient email address here.";
+      case "CC":
+        return "Enter an additional recipient here.";
+      case "Subject":
+        return "Enter a concise subject for your email.";
+      case "Body":
+        return "Compose your message here.";
       case "Greeting":
-        return "Part of the message, this is how you greet your recipient."
+        return "Part of the message, this is how you greet your recipient.";
       case "Message":
-        return "This is the main section of your email."
+        return "This is the main section of your email.";
       case "Closing":
-        return "Part of the message, this is where you say goodbye to your recipient."
+        return "Part of the message, this is where you say goodbye to your recipient.";
       default:
-        return ""
+        return "";
     }
   }
 
   return (
     <div className="field">
-      <Tippy content={handleHelp(label)}><label>{label}</label></Tippy>
-      <textarea className="textarea is-info"
+      <Tippy content={handleHelp(label)}>
+        <label>{label}</label>
+      </Tippy>
+      <textarea
+        className="textarea is-info"
         readOnly={false}
         rows={rows}
         cols={80}
         onChange={handleChange}
-        value = {state}
-        placeholder = {placeholder}
+        value={state}
+        placeholder={placeholder}
       />
     </div>
   );
