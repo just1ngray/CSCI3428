@@ -1,3 +1,8 @@
+/**
+ * CreateAccount page. Interactive way to create a specialist account
+ * on the server.
+ * @author Justin Gray (A00426753)
+ */
 import React, { useState } from "react";
 import axios from "axios";
 import CustomButton from "./components/CustomButton";
