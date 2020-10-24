@@ -1,154 +1,31 @@
-import { useRouter } from 'next/router';
-import React, { useState, useEffect } from "react";
-import CustomButton from "./components/CustomButton";
-import PageTitle from "./components/PageTitle";
-import TextBox from "./components/TextBox";
+import React, { useState } from "react";
 import store from '../store';
+import Email from "./components/Email";
 import Layout from './components/StudentLayout';
 
-export default function viewEmail() {
-  const router = useRouter(); // Routes inside functions.
-  let sampleEmail={
-    _id: "AIJKSBDakjsdbnJKBKNL",
-    __v: 1,
-    date: Date.now(),
-    subject: "Test Subject", 
-    body: "Hello,\nThis is the body of the email.\nThanks",
-    from: {
-      name: "Justin Gray",
-      email: "justin@gray.ca",
-      _id: "account_id",
-    },
-    to: 
-      {
-        name: "Nicholas",
-        email: "nick@morash.com",
-        _id: "account_id2",
-      },
-    cc: [],
-    bcc: [],
-  }
+const serverURL = "http://ugdev.cs.smu.ca:3385";
 
-  let [state, email] = useState(sampleEmail);
-
-
-  const storeState = store.getState();
-  if(storeState.view != undefined){
-    state = useState(storeState.view);
-  }
-  console.log(state)
-    email = state[0];
-  console.log(email)
-
-  function formatFrom() {
-    try {
-      const name = email.name;
-      const address = email.email;
-      const formatted = name + " (" + address + ")";
-      return formatted;
-    }catch{
-      return "";
-    }
-  }
-
-  function formatCC() {
-    try {
-      const formatted = email.cc
-      // .map((contact) => `${contact.this.name} (${contact.this.email})`)
-      // .join(" ");
-      return formatted;
-    }catch{
-      return "";
-    }
-  }
-
-  function formatSubject() {
-    try{
-      return email.subject;
-    }catch{
-      return "";
-    }
-  }
-
-  function formatBody() {
-    try{
-      return email.body;
-    }catch{
-      return "";
-    }
-  }
-
-  function handleReplyClick() {
-    if (email == undefined) console.log("email empty!") && router.push("/Reply")
+export default function ViewEmail() {
     
-    store.dispatch({
-      type: "setReplyEmail",
-      payload: {
-        _id: email._id,
-        name: email.name,
-        address: email.email,
-        subject: email.subject,
-        body: email.body
-      }
-    });
-    router.push('/Reply');
-  }
-  
-  function handleRouteClick(route) {
-    router.push(route);
-  }
+    const [id, setId] = useState("");
+    const [JWT, setJWT] = useState("");
+    const [userAuthored, setUserAuthored] = useState(true);
 
-  function handleBackClick(){
-    router.back();
-  }
+    const storeState = store.getState();
+    if(storeState != undefined){
+      setId(storeState.emailId);
+      setJWT(storeState.userJWT);
+      setUserAuthored(storeState.didAuthor);
+    }
+    //TODO: Persistance on page refresh? localStorage.setItem(id, JWT)? 
 
-
-  return (
-    <Layout>
-      <div>
-        <PageTitle title={`VIEWING ITEM`} />{" "}
-        {/* is user_id the from._id */}
-      </div>
-      <div>
-        <TextBox
-          label="From"
-          rows="1"
-          text={formatFrom()}
-        />
-        <TextBox label="CC" rows="1" text={formatCC()}/>
-        <TextBox
-          label="Subject"
-          rows="1"
-          text={formatSubject()}
-        />
-        <TextBox
-          label="Body"
-          rows="10"
-          text={formatBody()}
-        />
-      </div>
-      <div>
-        <span>
-          <CustomButton
-            label="Reply"
-            onClick={handleReplyClick}
-            type="button"
-            disabled={false}
-          />
-          <CustomButton
-            label="Back"
-            onClick={() => handleBackClick()}
-            type="button"
-            disabled={false}
-          />
-          <CustomButton
-            label="Help"
-            onClick={() => handleRouteClick("/Help")}
-            type="button"
-            disabled={false}
-          />
-        </span>
-      </div>
-   </Layout>
-  );
-} 
+    return (
+        <Layout>
+            <Email
+                id={id}
+                token={JWT}
+                userAuthor={userAuthored}
+            />
+        </Layout>
+    );
+}

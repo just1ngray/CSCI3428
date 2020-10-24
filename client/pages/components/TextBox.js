@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import Tippy from '@tippy.js/react';
-import 'tippy.js/dist/tippy.css';
+
 
 function TextBox({ label, rows, text}) {
   

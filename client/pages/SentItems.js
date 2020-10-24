@@ -1,34 +1,32 @@
 /**
  * @author: Bivash Pandey (A00425523)
+ * @author: Nicholas Morash (A00378981)
  */
 import React from "react";
 import CustomButton from "./components/CustomButton";
 import PageTitle from "./components/PageTitle";
-
-//EachEmailInfo is like a each row of sent Items
-//emailData is fake data stored in emailData.js
-import EachEmailInfo from "./components/EachMailInfo";
-import emailData from "./emailData";
 import { useRouter } from 'next/router';
 import Layout from './components/StudentLayout';
-import ClickableDiv from './components/ClickableDiv';
+import EmailList from "./components/EmailList";
+import store from "../store";
 
 export default function SentItems() {
-    const router = useRouter();
+  const router = useRouter();
   
-    function handleRouteClick(route) {
-      router.push(route);
-    }
+  function handleRouteClick(route) {
+    router.push(route);
+  }
 
+  function handleBackClick() {
+    router.back();
+  }
 
-  // I guess, this styling should be handled from different CSS file
-  const spacingFromLeft = {
-    paddingLeft: "180px",
-  };
+  const storeState = store.getState();
+  //TODO IMPLEMENT LOCAL STORAGE
 
   return (
     <Layout>
-      <PageTitle title="INBOX" />
+      <PageTitle title="SENT ITEMS" />
 
       {/* To, and subject horizontal alignment and padding with styles*/}
       <h4 className="card-title">
@@ -39,25 +37,14 @@ export default function SentItems() {
           <u>SUBJECT</u>
         </span>
       </h4>
-
-      {/* To display all the sent messages*/}
-      {emailData.map((data) => (
-        <ClickableDiv 
-          id={data.__v - 1}>
-            <EachEmailInfo 
-              key={data._id} 
-              to={`${data.from.name} (${data.from.email})`} 
-              subject={data.subject} 
-            />
-        </ClickableDiv>
-      ))}
+      <EmailList token={token} isSent={true}/>
       <br />
 
       {/* Input, Compose and Help Button*/}
       <span>
         <CustomButton
           label="Sent Items"
-          onClick={() => handleRouteClick("/SentItems")}
+          onClick={() => handleBackClick()}
           type="button"
           disabled={false}
         />

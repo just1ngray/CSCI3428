@@ -21,10 +21,21 @@ export default function () {
     console.log(storeState)
     const pword = storeState.pass;
     const userEmail = storeState.signInEmail;
+    let JWT = "";
     console.log(pword, userEmail);
     // console.log(axios.post("http://localhost:3385/api/account/login", {username:userEmail, password: pword}))
-    const loginResponse = await axios.post("http://localhost:3385/api/account/login", {username:userEmail, password: pword});
-    console.log(loginResponse);
+    try{
+      const loginResponse = await axios.post("http://localhost:3385/api/account/login", {username:userEmail, password: pword});
+      console.log(loginResponse);
+      JWT = loginResponse.data;
+    }catch(err){
+      console.log(err);
+    }
+    store.dispatch({
+      type: "userJWT",
+      payload: JWT
+    })
+    r.push("/StudentHome")
   }
 
   return (
@@ -66,6 +77,12 @@ export default function () {
           type="button"
           disabled={false}
         />          
+        <CustomButton
+          label="DEBUG: Reply"
+          onClick={() => handleRouteClick("/Reply")}
+          type="button"
+          disabled={false}
+        />
         <CustomButton
           label="DEBUG: Reply"
           onClick={() => handleRouteClick("/Reply")}
