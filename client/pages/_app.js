@@ -1,7 +1,20 @@
-import "tippy.js/dist/tippy.css";
+/**
+ * This is a react file which will loads first
+ *
+ * @author
+ */
+
+//import all the CSS files
 import "../styles/globals.css";
 import "../styles/bulma.css";
+import "tippy.js/dist/tippy.css";
 
+/**
+ * This function applies CSS to website and loads other funtions as needed
+ *
+ * @param {*} Components child components passed
+ * @param {*} pageProps
+ */
 function MyApp({ Component, pageProps }) {
   return (
     <div style={{ backgroundColor: "#a2bdbc" }}>
@@ -9,11 +22,11 @@ function MyApp({ Component, pageProps }) {
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css"
         integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA="
-        crossorigin="anonymous"
+        crossOrigin="anonymous"
       />
       <body>
-        <section class="section">
-          <div class="container">
+        <section className="section">
+          <div className="container">
             <Component {...pageProps} />
           </div>
         </section>

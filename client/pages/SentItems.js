@@ -1,25 +1,31 @@
 /**
- * @author: Bivash Pandey (A00425523)
+ * This file generates a sentItem page
+ *
+ * @author Bivash Pandey (A00425523)
  */
 import React from "react";
 import CustomButton from "./components/CustomButton";
 import PageTitle from "./components/PageTitle";
+import { useRouter } from "next/router";
+import Layout from "./components/StudentLayout";
+import ClickableDiv from "./components/ClickableDiv";
 
 //EachEmailInfo is like a each row of sent Items
 //emailData is fake data stored in emailData.js
 import EachEmailInfo from "./components/EachMailInfo";
 import emailData from "./emailData";
-import { useRouter } from 'next/router';
-import Layout from './components/StudentLayout';
-import ClickableDiv from './components/ClickableDiv';
 
+// This function returns the sentItem page
 export default function SentItems() {
-    const router = useRouter();
-  
-    function handleRouteClick(route) {
-      router.push(route);
-    }
+  const router = useRouter();
 
+  /**
+   * This function navigates to new url when button is clicked
+   * @param {*} route the url
+   */
+  function handleRouteClick(route) {
+    router.push(route);
+  }
 
   // I guess, this styling should be handled from different CSS file
   const spacingFromLeft = {
@@ -42,13 +48,12 @@ export default function SentItems() {
 
       {/* To display all the sent messages*/}
       {emailData.map((data) => (
-        <ClickableDiv 
-          id={data.__v - 1}>
-            <EachEmailInfo 
-              key={data._id} 
-              to={`${data.from.name} (${data.from.email})`} 
-              subject={data.subject} 
-            />
+        <ClickableDiv id={data.__v - 1}>
+          <EachEmailInfo
+            key={data._id}
+            to={`${data.from.name} (${data.from.email})`}
+            subject={data.subject}
+          />
         </ClickableDiv>
       ))}
       <br />

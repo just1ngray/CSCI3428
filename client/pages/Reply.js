@@ -1,56 +1,82 @@
-import store from '../store';
-import { useRouter } from 'next/router';
+/**
+ * This file displays a reply page with cc, subject, and body section
+ *
+ * @author
+ */
+import store from "../store";
+import { useRouter } from "next/router";
 import CustomButton from "./components/CustomButton";
 import PageTitle from "./components/PageTitle";
 import TextBox from "./components/TextBox";
 import InputTextBox from "./components/InputTextBox";
 import Layout from "./components/StudentLayout";
 
+/**
+ * This function returns the reply page
+ */
 export default function replyPage() {
   const router = useRouter(); // Routes inside functions.
   const storeState = store.getState();
-  console.log(storeState)
+  console.log(storeState);
   const pageState = storeState.reply;
-  console.log(pageState)
+  console.log(pageState);
 
+  /**
+   * This function return the formatted 'TO' section
+   */
   function formatTo() {
-    try {  
-      const formatted = pageState.name + " (" + pageState.email +")";
+    try {
+      const formatted = pageState.name + " (" + pageState.email + ")";
       return formatted;
-    } catch(err) {
-      return "";  
+    } catch (err) {
+      return "";
     }
   }
 
+  /**
+   * This function returns the formatted subject section
+   */
   function formatSubject() {
-    try {  
-        const prefix = "RE: "
-        const formatted = prefix + pageState.subject;
-        return formatted;
-    } catch(err) {
-        return "";
+    try {
+      const prefix = "RE: ";
+      const formatted = prefix + pageState.subject;
+      return formatted;
+    } catch (err) {
+      return "";
     }
   }
 
+  /**
+   * This function returns the formatted body section
+   */
   function formatBody() {
-    try {  
-        const prefix = "---------- QUOTED MESSAGE ----------\n"
-        const suffix = "\n---------- END OF QUOTE ------------\n"
-        const formatted = prefix + pageState.body + suffix;
-        return formatted;
-    } catch(err) {
-        return "";
+    try {
+      const prefix = "---------- QUOTED MESSAGE ----------\n";
+      const suffix = "\n---------- END OF QUOTE ------------\n";
+      const formatted = prefix + pageState.body + suffix;
+      return formatted;
+    } catch (err) {
+      return "";
     }
   }
 
-  function handleSendClick() {
+  /**
+   * This function passes the data when Send button is clicked
+   */
 
-  }
+  function handleSendClick() {}
 
+  /**
+   * This function routes to back page when back button is clicked
+   */
   function handleBackClick() {
     router.back();
   }
-  
+
+  /**
+   * This function navigates to a new url when button is clicked
+   * @param {*} route the url to navigate to
+   */
   function handleRouteClick(route) {
     router.push(route);
   }
@@ -62,29 +88,13 @@ export default function replyPage() {
         {/* is user_id the from._id */}
       </div>
       <div>
-        <TextBox
-          label="To"
-          rows="1"
-          text={formatTo()}
-        />
-        <InputTextBox 
-            label="CC" 
-            rows="1" 
-            text=""
-        />
-        <InputTextBox
-          label="Subject"
-          rows="1"
-          text={formatSubject()}
-        />
-        <InputTextBox
-          label="Body"
-          rows="10"
-          text={formatBody()}
-        />
+        <TextBox label="To" rows="1" text={formatTo()} />
+        <InputTextBox label="CC" rows="1" text="" />
+        <InputTextBox label="Subject" rows="1" text={formatSubject()} />
+        <InputTextBox label="Body" rows="10" text={formatBody()} />
       </div>
       <br />
-        <div class="buttons">
+      <div className="buttons">
         <span>
           <CustomButton
             label="Send"

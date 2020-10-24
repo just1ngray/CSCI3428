@@ -1,11 +1,23 @@
-import React from "react";
-//import styles from "../../button.module.css";
-import styles from "../../styles/Button.module.css";
+/**
+ * This file initializes a button along with it's properties
+ *
+ * @author
+ */
 
+import React from "react";
+
+/**
+ * This function defines a custom button
+ *
+ * @param {*} type the type of the button
+ * @param {*} onClick sets the onClick function
+ * @param {*} label sets the text to display as button
+ * @param {*} disabled defines if the button is clickable
+ */
 export default function CustomButton({ type, onClick, label, disabled }) {
-  
-    return (
-    <button className="button is-primary is-medium is-rounded"
+  return (
+    <button
+      className="button is-primary is-medium is-rounded"
       onClick={onClick}
       type={type}
       disabled={disabled}
@@ -14,18 +26,3 @@ export default function CustomButton({ type, onClick, label, disabled }) {
     </button>
   );
 }
-
-
-{/* <button
-className="button is-block is-fullwidth is-primary is-medium is-rounded"
-onClick={() => handleRouteClick("/login")}
-type="submit"
-disabled={false}
->
-Login
-</button> */}
-
-{/* <div class="buttons">
-  <button class="button is-primary">Primary</button>
-  <button class="button is-link">Link</button>
-</div> */}
