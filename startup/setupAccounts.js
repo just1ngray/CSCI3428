@@ -39,6 +39,7 @@ module.exports = async function verifyAccounts() {
       sent: [],
       contacts: [],
       child_id: String(specialistID),
+      childType: "specialist",
     });
     promises.push(specialistAcc.save());
 
@@ -51,6 +52,7 @@ module.exports = async function verifyAccounts() {
       sent: [],
       contacts: [],
       child_id: String(studentID),
+      childType: "student",
     });
     promises.push(studentAcc.save());
 

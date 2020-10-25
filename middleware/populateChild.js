@@ -42,18 +42,20 @@ async function populate(req, res, next) {
       .status(500)
       .send(`That account has an invalid child_id ${child_id}`);
 
-  const student = await Student.findById(child_id);
-  if (student) {
-    req.auth.student = student;
-    next();
-  } else {
+  if (req.auth.account.childType === "specialist") {
     const specialist = await Specialist.findById(child_id);
     if (!specialist)
-      return res
-        .status(500)
-        .send(`No student or specialist with _id ${child_id}`);
+      return res.status(500).send("No specialist found with _id " + child_id);
 
     req.auth.specialist = specialist;
+    next();
+  } else {
+    // must be student
+    const student = await Student.findById(child_id);
+    if (!student)
+      return res.status(500).send("No student found with _id " + child_id);
+
+    req.auth.student = student;
     next();
   }
 }
