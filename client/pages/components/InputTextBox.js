@@ -1,13 +1,28 @@
 /**
- * @author: Bivash Pandey (A00425523)
+ * This file contains a component that generates input text box with different properties
+ *
+ * Bivash Pandey (A00425523)
  */
 import React, { useState } from "react";
 import Tippy from "@tippy.js/react";
 import store from "../../store";
 
+/**
+ * This function returns the input text box
+ * @param {*} label the label
+ * @param {Number} rows the number of rows
+ * @param {String} placeholder the placeholder to be displayed in InputTextBox
+ * @param {*} text initial text in the textbox
+ */
 export default function InputTextBox({ label, rows, placeholder, text }) {
+  // variable state for initial state and setState is to set the state
   const [state, setState] = useState(text);
 
+  /**
+   * This function handles the event when some values are changed
+   *
+   * @param {*} e the event triggered when values are changed
+   */
   async function handleChange(e) {
     const change = e.target.value;
     await setState(change);
@@ -17,6 +32,10 @@ export default function InputTextBox({ label, rows, placeholder, text }) {
     });
   }
 
+  /**
+   * This function retuns the help string
+   * @param {String} helpType word to be passed in switch statement
+   */
   function handleHelp(helpType) {
     switch (helpType) {
       case "To":

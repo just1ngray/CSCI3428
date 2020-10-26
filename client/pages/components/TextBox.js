@@ -1,28 +1,45 @@
-import React, {useEffect, useState} from "react";
-import Tippy from '@tippy.js/react';
-import 'tippy.js/dist/tippy.css';
+/**
+ * This file contains a component that generates input text box with different properties
+ *
+ * @author:
+ */
 
-function TextBox({ label, rows, text}) {
-  
-  function handleHelp(helpType){
-    switch(helpType){
-      case "From": 
-        return "This person sent you the message."
-      case "To": //This to is seen in the Reply To field.
-        return "This is the person you are Replying to."
-      case "Subject": 
-        return "The (concise) subject matter of the email."
+import Tippy from "@tippy.js/react";
+
+/**
+ * This function returns a text box
+ * @param {*} label the label
+ * @param {Number} rows the number of rows
+ * @param {*} text initial text in the textbox
+ */
+function TextBox({ label, rows, text }) {
+  /**
+   * This function displays a dialog box when hovering over labels
+   *
+   * @param {String} helpType word to be passed in switch statement
+   */
+  function handleHelp(helpType) {
+    switch (helpType) {
+      case "From":
+        return "This person sent you the message.";
+      case "To":
+        return "This is the person you are Replying to.";
+      case "Subject":
+        return "The (concise) subject matter of the email.";
       case "CC":
-        return "Other people this message was sent to."
+        return "Other people this message was sent to.";
       case "Body":
-        return "The message that you recieved."
+        return "The message that you recieved.";
     }
   }
 
   return (
     <div className="field">
-      <Tippy content={handleHelp(label)}><label>{label}</label></Tippy>
-      <textarea className = "textarea is-info"
+      <Tippy content={handleHelp(label)}>
+        <label>{label}</label>
+      </Tippy>
+      <textarea
+        className="textarea is-info"
         readOnly={true}
         rows={rows}
         cols={80}
