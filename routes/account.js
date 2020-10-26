@@ -20,7 +20,10 @@ router.post("/login", async (req, res) => {
 
   const isValidPassword = await account.isValidPassword(password);
   if (isValidPassword) {
-    res.send(account.getAuthToken());
+    res.send({
+      token: account.getAuthToken(),
+      childType: account.childType,
+    });
   } else {
     res.status(403).send("Wrong password.");
   }

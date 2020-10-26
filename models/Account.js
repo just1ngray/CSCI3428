@@ -56,13 +56,18 @@ const accountSchema = new mongoose.Schema({
     type: String,
     maxlength: 128,
   },
+  childType: {
+    type: String,
+    enum: ["specialist", "student"],
+  },
 });
 
 /**
  * Gets the JSONWebToken for the account document
  * Included properties in JWT body:
- *  - _id
- *  - __v
+ *  - _id       - email
+ *  - __v       - child_id
+ *  - name      - childType
  * @author Justin Gray (A00426753)
  */
 accountSchema.methods.getAuthToken = function () {
@@ -73,6 +78,7 @@ accountSchema.methods.getAuthToken = function () {
       name: this.name,
       email: this.email,
       child_id: this.child_id,
+      childType: this.childType,
     },
     String(process.env.G2_JWT)
   );

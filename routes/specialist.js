@@ -28,6 +28,7 @@ router.post("/sign-up", (req, res) => {
         sent: [],
         contacts: [],
         child_id: String(specialist_id),
+        childType: "specialist",
       });
 
       const specialist = new Specialist({
@@ -75,6 +76,7 @@ router.post("/student", [auth, populateChild], (req, res) => {
     sent: [],
     contacts: [],
     child_id: student_id,
+    childType: "student",
   });
 
   const student = new Student({
