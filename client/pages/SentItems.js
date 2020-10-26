@@ -1,6 +1,6 @@
 /**
  * Sent mailbox that displays all sent emails wraped in Layout with compose button.
- *
+ * @author Bivash Pandey (A004xxxxx)
  * @author Nicholas Morash (A00378981)
  */
 
@@ -22,7 +22,7 @@ export default function Inbox() {
 
   return (
     <Layout>
-      <PageTitle title="INBOX ITEMS" />
+      <PageTitle title="SENT ITEMS" />
 
       {/* To, and subject horizontal alignment and padding with styles*/}
       <h4 className="card-title">
