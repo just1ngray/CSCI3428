@@ -1,7 +1,8 @@
 /**
- * This file displays the home page of the application
+ * This is a login page with a link to account creation.
  *
- * @author
+ * @version 0.3.0 (with axios and createaccount)
+ * @author Nicholas Morash (A00378981)
  */
 
 /** TODO: LOGIN PAGE
@@ -9,90 +10,99 @@
  */
 import { useRouter } from "next/router";
 import CustomButton from "./components/CustomButton";
-import InputTextBox from "./components/InputTextBox";
-import PassTextBox from "./components/PassTextBox";
-import store from "../store";
 import axios from "axios";
+import { useState } from "react";
 
+//url for axios (change to ugdev on install)
+const serverURL = "http://localhost:3385";
 /**
- * Routes inside functions
+ * Main index page w/ login and link to account creation.
+ *
  */
 export default function () {
-  const r = useRouter();
+  const router = useRouter();
+  const [user, setUser] = useState("");
+  const [pword, setPword] = useState("");
+  const [JWT, setJWT] = useState("");
+  const [accountType, setAccountType] = useState("");
 
   /**
    * This function navigates to a new url when button is clicked
    * @param {*} route the url to navigate to
    */
   function handleRouteClick(route) {
-    r.push(route);
+    router.push(route);
   }
+
+  const handleUserChange = (e) => {
+    e.persist();
+    setUser(e.target.value);
+  };
+
+  const handlePassChange = (e) => {
+    e.persist();
+    setPword(e.target.value);
+  };
 
   /**
    * This functions handles the signIn, posts the username and password
    */
   async function handleSignIn() {
-    const storeState = store.getState();
-    console.log(storeState);
-    const pword = storeState.pass;
-    const userEmail = storeState.signInEmail;
-    console.log(pword, userEmail);
-    // console.log(axios.post("http://localhost:3385/api/account/login", {username:userEmail, password: pword}))
-    const loginResponse = await axios.post(
-      "http://localhost:3385/api/account/login",
-      { username: userEmail, password: pword }
-    );
-    console.log(loginResponse);
+    try {
+      //POST to server to get Response token
+      const req = axios.post(`${serverURL}/api/account/login`, {
+        username: user,
+        password: pword,
+      });
+      const res = await req;
+      //sets state for routing (potentially wont need)
+      setJWT(res.data.token);
+      setAccountType(res.data.childType);
+      //sets localStorage for JWT persistance.
+      localStorage.setItem("accType", res.data.childType);
+      localStorage.setItem("token", res.data.token);
+      //routes.
+      router.push("/Inbox");
+    } catch (err) {
+      console.log(err);
+      alert("Incorrect email or password, please try again.");
+    }
   }
 
   return (
     <div>
       {/* Field for email and password*/}
       <div>
-        <InputTextBox label="Email" rows="1" placeholder="Email Address" />
-        <PassTextBox label="Password:" />
-        <CustomButton
-          label="Sign In"
-          onClick={() => handleSignIn()}
-          type="button"
-          disabled={false}
-        />
+        <form>
+          <label>
+            Email:
+            <input type="text" name="name" onChange={handleUserChange} />
+          </label>
+          <label>
+            Password:
+            <input
+              type="password"
+              name="password"
+              onChange={handlePassChange}
+            />
+          </label>
+        </form>
+        <span>
+          <CustomButton
+            label="Sign In"
+            disabled={false}
+            onClick={() => handleSignIn()}
+          />
+          <CustomButton
+            label="Create Account"
+            disabled={false}
+            onClick={() => handleRouteClick("/CreateAccount")}
+          />
+        </span>
       </div>
       <br />
       <div className="buttons">
-        <span>
-          {/* button for navigation*/}
-          <CustomButton
-            label="Student"
-            onClick={() => handleRouteClick("/StudentHome")}
-            type="button"
-            disabled={false}
-          />
-          <CustomButton
-            label="Specialist"
-            onClick={() => handleRouteClick("/AdminHome")}
-            type="button"
-            disabled={false}
-          />
-          <CustomButton
-            label="DEBUG: ViewEmail"
-            onClick={() => handleRouteClick("/ViewEmail")}
-            type="button"
-            disabled={false}
-          />
-          <CustomButton
-            label="DEBUG: Compose"
-            onClick={() => handleRouteClick("/Compose")}
-            type="button"
-            disabled={false}
-          />
-          <CustomButton
-            label="DEBUG: Reply"
-            onClick={() => handleRouteClick("/Reply")}
-            type="button"
-            disabled={false}
-          />
-        </span>
+        <span></span>
       </div>
     </div>
   );

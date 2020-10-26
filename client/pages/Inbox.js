@@ -1,5 +1,5 @@
 /**
- * Sent mailbox that displays all sent emails wraped in Layout with compose button.
+ * Inbox that displays all inbox emails wraped in Layout with compose button.
  *
  * @author Nicholas Morash (A00378981)
  */
@@ -24,17 +24,17 @@ export default function Inbox() {
     <Layout>
       <PageTitle title="INBOX ITEMS" />
 
-      {/* To, and subject horizontal alignment and padding with styles*/}
+      {/* From, and subject horizontal alignment and padding with styles*/}
       <h4 className="card-title">
         <span>
-          <u>To</u>
+          <u>FROM</u>
         </span>
         <span className="float-right">
           <u>SUBJECT</u>
         </span>
       </h4>
       {/* List of EmailHeader components. */}
-      <EmailList token={localObj} isSent={true} />
+      <EmailList token={localObj} isSent={false} />
       <br />
 
       {/* Input, Compose and Help Button*/}

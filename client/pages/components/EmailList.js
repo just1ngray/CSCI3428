@@ -1,29 +1,50 @@
 /**
- * This file displays a list of email in Sent Items and Inbox
+ * This file displays a list of EmailHeader components in Sent Items and Inbox
  *
- * @author
+ * @author Nicholas Morash (A00378981)
+ * @author Bivash ... 
  */
 
 import React from "react";
-import ClickableDiv from "./ClickableDiv";
-import EachEmailInfo from "./EachMailInfo";
-import emailData from "../emailData";
+import axios from "axios";
+//import EmailHeader from "./EmailHeader";
+
+const serverURL = "http://localhost:3385";
 
 /**
- * This function populates the list of emails
+ * This function populates the list of emails.
+ * @param obj {object containin JWT data}
+ * @param isSent {boolean, true if emails are sent mails}
  */
-export default function EmailList() {
-  for (let i = 0; i < 5; i++) {
-    const currentEmail = emailData[i];
+export default function EmailList(obj, isSent) {
+  //sets API enpoint to sent or inbox
+  let endpoint = "";
+  if (isSent) {
+    endpoint = "sent";
+  } else {
+    endpoint = "inbox";
+  }
+
+  //Gets inbox/sent.
+  const req = axios.get(`${serverURL}/api/email/${endpoint}`, {
+    headers: { "x-auth-token": obj.token },
+  });
+  const res = req;
+  const emails = res.data;
+
+  //Displays a no emails msg if mailbox is empty.
+  if (!emails) {
     return (
-      // clickable div component of a email list
-      <ClickableDiv id={i}>
-        <EachEmailInfo
-          key={currentEmail._id}
-          to={`${currentEmail.from.name} (${currentEmail.from.email})`}
-          subject={currentEmail.subject}
-        />
-      </ClickableDiv>
+      <div className="box">
+        <p>
+          <strong>You have no emails in your mailbox!</strong>
+        </p>
+      </div>
     );
+  } else {
+    //Generates an email header for each email ID
+    for (let i = 0; i < emails.length; i++) {
+      return <EmailHeader id={emails[i].id} token={obj.token} didAuthor={isSent}/>;
+    }
   }
 }
