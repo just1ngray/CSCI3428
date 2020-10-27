@@ -11,7 +11,6 @@ const auth = require("../middleware/auth");
  */
 router.post("/", auth, async (req, res) => {
   const sender = req.auth.account;
-  const recipient_ids = [];
 
   const from = fillContact({
     ...req.body.from,
@@ -44,6 +43,8 @@ router.post("/", auth, async (req, res) => {
       email
         .save()
         .then(() => {
+          res.send(email);
+
           // add to sender sent
           sender.sent.push({
             flags: [],
@@ -52,28 +53,28 @@ router.post("/", auth, async (req, res) => {
           sender.markModified("sent");
           sender.save();
 
-          // add to recipeint inbox
-          const recipientPromises = [];
-          recipient_ids.forEach((id) =>
-            recipientPromises.push(Account.findById(id))
-          );
-
-          Promise.all(recipientPromises).then((recipients) => {
-            recipients.forEach((account) => {
-              account.inbox.push({
+          // add to recipient inbox
+          resolved
+            .slice(1, resolved.length)
+            .map((contact) => contact.account)
+            .filter((_id) => _id !== undefined)
+            .forEach(async (_id) => {
+              const recipient = await Account.findById(_id);
+              recipient.inbox.push({
                 flags: [],
                 email: email._id,
               });
-              account.markModified("inbox");
-              account.save();
+              recipient.markModified("inbox");
+              recipient.save();
             });
-          });
-
-          res.send(email);
         })
-        .catch((err) => res.status(400).send(err));
+        .catch((err) => {
+          res.status(400).send(err);
+        });
     })
-    .catch((err) => res.status(400).send(err));
+    .catch((err) => {
+      res.status(400).send(err);
+    });
 });
 
 /**
@@ -274,51 +275,26 @@ async function getEmails(account, email_ids) {
  * @author Justin Gray (A00426753)
  */
 async function fillContact(contact) {
-  if (!mongoose.Types.ObjectId.isValid(contact.account))
+  const accEmail = await Account.findOne({ email: contact.email });
+  if (mongoose.Types.ObjectId.isValid(contact.account)) {
+    const accById = await Account.findById(contact.account);
+    return {
+      name: contact.name === undefined ? accById.name : contact.name,
+      email: contact.email === undefined ? accById.email : contact.email,
+      account: contact.account,
+    };
+  } else if (accEmail) {
+    return {
+      name: contact.name === undefined ? accEmail.name : contact.name,
+      email: contact.email === undefined ? accEmail.email : contact.email,
+      account: accEmail._id,
+    };
+  } else {
     return {
       name: contact.name,
       email: contact.email,
     };
-  const idAccount = await Account.findById(contact.account);
-  const emailAccount = await Account.findOne({ email: contact.email });
-  if (!idAccount && !emailAccount)
-    return {
-      name: contact.name,
-      email: contact.email,
-    };
-
-  const names = [
-    contact.name,
-    idAccount ? idAccount.name : undefined,
-    emailAccount ? emailAccount.name : undefined,
-  ];
-  const emails = [
-    contact.email,
-    idAccount ? idAccount.email : undefined,
-    emailAccount ? emailAccount.email : undefined,
-  ];
-  const ids = [
-    idAccount ? idAccount._id : undefined,
-    emailAccount ? emailAccount._id : undefined,
-  ];
-
-  let name = names[0];
-  if (name === undefined) name = names[1];
-  if (name === undefined) name = names[2];
-
-  let email = emails[0];
-  if (email === undefined) email = emails[1];
-  if (email === undefined) email = emails[2];
-
-  let _id = ids[0];
-  if (_id === undefined) _id = ids[1];
-  if (_id === undefined) _id = ids[2];
-
-  return {
-    name,
-    email,
-    account: _id,
-  };
+  }
 }
 
 module.exports = router;
