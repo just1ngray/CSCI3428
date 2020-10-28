@@ -1,0 +1,32 @@
+{
+  "name": "autismns-email",
+  "version": "1.0.0",
+  "description": "A training email system for Autism NS",
+  "main": "index.js",
+  "scripts": {
+    "dev": "cd client && npm run dev",
+    "build": "cd client && npm run build",
+    "client": "cd client && npm run start",
+    "server": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/just1ngray/CSCI3428.git"
+  },
+  "author": "Group2",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/just1ngray/CSCI3428/issues"
+  },
+  "homepage": "https://github.com/just1ngray/CSCI3428#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.8",
+    "next": "9.5.3",
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
+  }
+}
