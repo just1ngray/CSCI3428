@@ -7,8 +7,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import CustomButton from "./components/CustomButton";
 import { useRouter } from "next/router";
-
-const serverURL = "http://ugdev.cs.smu.ca:3385/api/specialist/sign-up";
+import defaults from "../utils/defaults";
 
 export default function CreateAccount() {
   const router = useRouter();
@@ -41,7 +40,7 @@ export default function CreateAccount() {
   function sendPost() {
     setIsSending(true);
     axios
-      .post(serverURL, {
+      .post(`${defaults.serverUrl}/specialist/sign-up`, {
         name,
         password,
         email,
@@ -53,7 +52,7 @@ export default function CreateAccount() {
           </h2>
         );
         setTimeout(() => {
-          router.push("/Login");
+          router.push("/");
         }, 2000);
       })
       .catch((err) => {
