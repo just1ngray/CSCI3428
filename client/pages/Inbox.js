@@ -4,14 +4,14 @@
  * @author Nicholas Morash (A00378981)
  */
 
-import React from "react";
+import React, { useState } from "react";
 import CustomButton from "./components/CustomButton";
 import PageTitle from "./components/PageTitle";
 import { useRouter } from "next/router";
 import Layout from "./components/StudentLayout";
 import EmailList from "./components/EmailList";
 
-export default function SentItems() {
+export default function Inbox() {
   const router = useRouter();
 
   //Routes to given route
@@ -21,26 +21,26 @@ export default function SentItems() {
 
   return (
     <Layout>
-      <PageTitle title="SENT ITEMS" />
+      <PageTitle title="INBOX ITEMS" />
 
       {/* To, and subject horizontal alignment and padding with styles*/}
       <h4 className="card-title">
         <span>
-          <u>To</u>
+          <u>From</u>
         </span>
         <span className="float-right">
           <u>SUBJECT</u>
         </span>
       </h4>
       {/* List of EmailHeader components. */}
-      <EmailList userAuthor={true} />
+      <EmailList userAuthor={false} />
       <br />
 
       {/* Input, Compose and Help Button*/}
       <span>
         <CustomButton
-          label="Inbox"
-          onClick={() => handleRouteClick("/Inbox")}
+          label="Sent Items"
+          onClick={() => handleRouteClick("/SentItems")}
           type="button"
           disabled={false}
         />

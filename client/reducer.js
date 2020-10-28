@@ -59,7 +59,15 @@ export default function reducer(state = [], action) {
         case "setEmail":
             return {...state, signInEmail: action.payload}
         case "setPass":
-            return {...state, pass: action.payload}         
+            return {...state, pass: action.payload}
+        case "setGreeting":
+            return {...state, greeting: action.payload}  
+        case "setMessage":
+            return {...state, message: action.payload}  
+        case "setClosing":
+            return {...state, closing: action.payload}
+        case "userAuthor":
+            return {...state, userAuthor: action.payload}        
         default:
             return state;
     }

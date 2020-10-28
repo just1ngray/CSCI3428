@@ -3,7 +3,7 @@
  *
  * Bivash Pandey (A00425523)
  */
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Tippy from "@tippy.js/react";
 import store from "../../store";
 
@@ -60,7 +60,7 @@ export default function InputTextBox({ label, rows, placeholder, text }) {
   return (
     <div className="field">
       <Tippy content={handleHelp(label)}>
-        <label>{label}</label>
+        <label><strong>{label}</strong></label>
       </Tippy>
       <textarea
         className="textarea is-info"

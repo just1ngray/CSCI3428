@@ -36,7 +36,7 @@ function TextBox({ label, rows, text }) {
   return (
     <div className="field">
       <Tippy content={handleHelp(label)}>
-        <label>{label}</label>
+        <label><strong>{label}</strong></label>
       </Tippy>
       <textarea
         className="textarea is-info"
