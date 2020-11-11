@@ -1,7 +1,7 @@
 /**
- * This file displays a help page
+ * This file displays a help page with helpful links to emailing resources
  *
- * @author
+ * @author Tiffany Conrad
  */
 import React from "react";
 import Layout from "./components/StudentLayout";
@@ -22,9 +22,16 @@ export default function Help() {
   }
   return (
     <Layout>
-      <h1>Under Construction!</h1>
+      <h1>Helpful Links for Writing Emails</h1>
+
+      <ul>
+        <li><a href="https://www.grammarly.com/blog/email-writing-tips/">Grammarly</a></li>
+        <li><a href="https://studio.smu.ca/ac-resources/professional-emails?rq=emai">Saint Mary's University</a></li>
+        <li><a href="https://owl.purdue.edu/owl/general_writing/academic_writing/email_etiquette.html">Owl Purdue</a></li>
+      </ul>
 
       <CustomButton
+        className="button is-warning"
         label="Back"
         onClick={() => handleBackClick()}
         type="button"
