@@ -2,6 +2,7 @@
  * CreateAccount page. Interactive way to create a specialist account
  * on the server.
  * @author Justin Gray (A00426753)
+ * @author Tiffany Conrad (A00414194)
  */
 import React, { useState } from "react";
 import axios from "axios";
@@ -118,6 +119,7 @@ export default function CreateAccount() {
       </div>
       <div className="columns is-centered">
         <CustomButton
+          className="button is-success"
           type="submit"
           onClick={sendPost}
           label="Sign-Up"

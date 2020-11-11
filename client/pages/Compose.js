@@ -1,7 +1,7 @@
 /**Same For Reply.js
  * Set the local state of email components
  * posdt email
- * 
+ * @author Tiffany Conrad (A00414194)
  */
 import { useState } from "react";
 import store from '../store';
@@ -137,18 +137,21 @@ export default function () {
           <p>{errMsg.length == 0 ? " " : errMsg}</p>
           <div class="buttons">
             <CustomButton
+              className="button is-success"
               label="Send"
               onClick={handleSendClick}
               type="button"
               disabled={checked.length < 4}
             />
             <CustomButton
+              className="button is-warning"
               label="Back"
               onClick={() => handleBackClick()}
               type="button"
               disabled={false}
             />
             <CustomButton
+              class="button is-info"
               label="Help"
               onClick={() => handleRouteClick("/Help")}
               type="button"

@@ -2,6 +2,7 @@
  *
  * Email page populates data of email from users account.
  * @author Nicholas Morash (A00378981)
+ * @author Tiffany Conrad (A00414194)
  */
 
 import React, { useState, useEffect } from "react";
@@ -68,18 +69,21 @@ export default function Email({userAuthor}) {
     <div>
       <span>
         <CustomButton
+            className="button is-primary"
             label="Reply"
             onClick={() => handleRouteClick("/Reply")}
             type="button"
             disabled={false}
         />
         <CustomButton
+          className="button is-warning"
           label="Back"
           onClick={() => handleBackClick()}
           type="button"
           disabled={false}
         />
         <CustomButton
+           className="button is-info"
           label="Help"
           onClick={() => handleRouteClick("/Help")}
           type="button"

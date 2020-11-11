@@ -2,6 +2,7 @@
  * Sent mailbox that displays all sent emails wraped in Layout with compose button.
  *
  * @author Nicholas Morash (A00378981)
+ * @author Tiffany Conrad (A00414194)
  */
 
 import React, { useState } from "react";
@@ -51,6 +52,7 @@ export default function Inbox() {
           disabled={false}
         />
         <CustomButton
+          className="button is-info"
           label="Help"
           onClick={() => handleRouteClick("/Help")}
           type="button"

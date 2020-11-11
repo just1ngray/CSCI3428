@@ -1,6 +1,7 @@
 /**
  * This file displays a reply page with cc, subject, and body section
  *
+ * @author Tiffany Conrad (A00414194)
  * @author
  */
 import React, {useState, useEffect} from 'react';
@@ -132,18 +133,21 @@ export default function Reply() {
       <div className="buttons">
         <span>
           <CustomButton
+            className="button is-success"
             label="Send"
             onClick={() => handleSendClick()}
             type="button"
             disabled={false}
           />
           <CustomButton
+            className="button is-warning"
             label="Back"
             onClick={() => handleBackClick()}
             type="button"
             disabled={false}
           />
           <CustomButton
+            className="button is-info"
             label="Help"
             onClick={() => handleRouteClick("/Help")}
             type="button"

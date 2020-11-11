@@ -3,6 +3,7 @@
  *
  * @version 0.3.0 (with axios and createaccount)
  * @author Nicholas Morash (A00378981)
+ * @author Tiffany Conrad (A00414194)
  */
 
 /** TODO: LOGIN PAGE
@@ -88,6 +89,7 @@ export default function () {
         </form>
         <span>
           <CustomButton
+            className="button is-success"
             type="submit"
             label="Sign In"
             disabled={false}
