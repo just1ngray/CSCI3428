@@ -159,8 +159,8 @@ router.delete("/:box/:email_id", auth, async (req, res) => {
   if (index == -1)
     return res.status(404).send("Email doesn't exist in your mailbox.");
 
-  const { email_id, flags } = account[req.params.box].splice(index, 1);
-  const email = await Email.findById(email_id);
+  const emailInBox = account[req.params.box].splice(index, 1);
+  const email = await Email.findById(req.params.email_id);
 
   // save the account with the email gone
   account.markModified(req.params.box);
@@ -171,34 +171,40 @@ router.delete("/:box/:email_id", auth, async (req, res) => {
       // return the email that was just deleted
       res.send({
         ...email,
-        flags,
+        flags: emailInBox.flags,
       });
     })
     .catch((err) => {
       res.status(400).send(err);
     });
 
-  // delete the email.X.account where applicable, and remove document if
-  // nobody has reference to the email anymore
-  let accountsWithReferenceToEmail = 0;
-  if (email.from.account) {
-    if (String(account._id) === String(email.from.account)) {
-      delete email.from.account;
-      email.markModified("from");
-    } else accountsWithReferenceToEmail++;
+  // delete email.X.account to the deleting account
+  const delAcc_id = req.auth._id;
+  if (email.from && email.from.account == delAcc_id) {
+    delete email.from.account;
+    email.markModified("from");
   }
-  ["to", "cc", "bcc"].forEach((list) => {
-    email[list].forEach((contact, index) => {
-      if (contact.account) {
-        if (String(account._id) === String(email.from.account)) {
-          delete email[list][index].account;
-          email.markModified(list);
-        } else accountsWithReferenceToEmail++;
+
+  ["to", "cc", "bcc"].forEach((recipientType) => {
+    email[recipientType].forEach((contact, index) => {
+      if (contact.account && contact.account == delAcc_id) {
+        delete email[recipientType][index].account;
+        email.markModified(recipientType);
       }
     });
   });
 
-  if (accountsWithReferenceToEmail === 0) {
+  // and remove the email document if no account refers to it anymore
+  let shouldExist = false;
+  if (email.from && email.from.account) shouldExist = true;
+
+  ["to", "cc", "bcc"].forEach((recipientType) => {
+    email[recipientType].forEach((contact) => {
+      if (contact.account && contact.account) shouldExist = true;
+    });
+  });
+
+  if (!shouldExist) {
     email.remove();
   } else {
     email.save();
