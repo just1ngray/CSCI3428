@@ -27,6 +27,12 @@ const accountSchema = new mongoose.Schema({
     match: /^.+@.+\..+$/,
   },
   password: String, // bcrypt hashed
+  security: [
+    {
+      question: String,
+      answer: String,
+    },
+  ],
   inbox: [
     {
       _id: false,
