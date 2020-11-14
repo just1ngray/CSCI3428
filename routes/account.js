@@ -1,5 +1,21 @@
 const router = require("express").Router();
+const { db } = require("../models/Account");
 const Account = require("../models/Account");
+
+/**
+ * Get the security questions for an account
+ * https://github.com/just1ngray/CSCI3428/wiki/HTTP-Endpoints#get-apiaccountsecurityquestionsemail
+ * @author Justin Gray (A00426753)
+ */
+router.get("/securityquestions/:email", async (req, res) => {
+  try {
+    const account = await Account.findOne({ email: req.params.email });
+    const securityQuestions = account.security.map((qa) => qa.question);
+    res.send(securityQuestions);
+  } catch (err) {
+    res.status(400).send(err);
+  }
+});
 
 /**
  * Login and receive a JSONWebToken.
@@ -37,6 +53,7 @@ router.post("/login", async (req, res) => {
 router.put("/change-credentials/:account_id", async (req, res) => {
   const account_id = req.params.account_id;
   const currentPW = req.body.currentPW;
+  const securityAns = req.body.security;
 
   // optionals
   const newEmail = req.body.newEmail;
@@ -47,8 +64,8 @@ router.put("/change-credentials/:account_id", async (req, res) => {
     const account = await Account.findById(account_id);
     if (!account) return res.status(404).send("Account not found.");
 
-    const isAuthed = await account.isValidPassword(currentPW);
-    if (!isAuthed) return res.status(403).send("Wrong current password.");
+    const isAuthed = await isAuth(account, currentPW, securityAns);
+    if (!isAuthed) return res.status(403).send("Not authorized.");
 
     if (newPW !== undefined) account.password = newPW;
     if (newEmail !== undefined) account.email = newEmail;
@@ -62,5 +79,29 @@ router.put("/change-credentials/:account_id", async (req, res) => {
     res.status(400).send(`${account_id} is not a valid Mongo ObjectID`);
   }
 });
+
+/**
+ * Find if a user is authorized for the specified account.
+ * @author Justin Gray (A00426753)
+ */
+async function isAuth(account, plainPW, security) {
+  if (plainPW) return await account.isValidPassword(plainPW);
+
+  function formatAnswer(ans) {
+    return ans.toLowerCase().replace(" ", "");
+  }
+
+  return new Promise((resolve) => {
+    account.security.forEach((dbqa) => {
+      const qa = security.filter(
+        (securityQuestion) => securityQuestion.question === dbqa.question
+      )[0];
+      if (formatAnswer(qa.answer) !== formatAnswer(dbqa.answer))
+        return resolve(false);
+    });
+
+    resolve(true);
+  });
+}
 
 module.exports = router;
