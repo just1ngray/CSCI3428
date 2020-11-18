@@ -2,6 +2,7 @@
  * Set the local state of email components
  * posdt email
  * 
+ * @author Jay Patel (A00433907)
  */
 import { useState } from "react";
 import store from '../store';
@@ -43,18 +44,12 @@ export default function () {
     router.push(route); 
   }
 
+  {/*This function handles the back button */}
   function handleBackClick() {
     router.back()
   }
 
-  function handleHelp (helpType) {
-    switch(helpType) {
-      case "cc":
-        return "This is a CC"
-    }
-
-  }
-
+  {/*This function handles a click on the checkboxes */}
   function handleCheckClick(event, label) {
     const copyChecked = [...checked];
     if (event.target.checked) {
@@ -66,6 +61,7 @@ export default function () {
     setChecked(copyChecked);
   }
 
+  {/*Message to be displayed when any checkbox is unchecked */}
   let errMsg = "";
   if (!checked.includes("to")) {
     errMsg = "Remember to check the to box!";
@@ -83,71 +79,101 @@ export default function () {
         <PageTitle title={`COMPOSING MESSAGE`} />{" "}
         {/* is user_id the from._id */}
       </div>
+
       <div>
+
+        {/*call to InputTextBox for 'to' */}
         <InputTextBox
           label="To"
           rows="1"
         />
+
+        {/*checkbox for 'To' */}
         <div>
-          <input 
+          {!checked.includes("to") ? (<span><input 
             type="checkbox" 
             className= "checkBox" 
+            style={{width:20, height:20}}
             onChange={(e) => handleCheckClick(e, "to")} 
             checked={checked.includes("to")} 
           />
-          <label>Are you sending this email to the right person?</label>
+          <label><strong>Are you sending this email to the right person?</strong></label></span>) : null }
         </div>
+
+        {/*fields for 'CC' */}
         <InputTextBox 
             label="CC" 
             rows="1"  
         />
-        <Tippy content= {handleHelp("cc")}><input 
+        
+        {/*checkbox for 'CC' */}
+        <div>
+          {!checked.includes("cc") ? 
+          (<span><input 
           type="checkbox" 
           className= "checkBox" 
+          style={{width:20, height:20}}
           onChange={(e) => handleCheckClick(e, "cc")} 
           checked={checked.includes("cc")} 
-        /></Tippy>
+        /></span>) : null}
+        </div>
+
+        {/*call to InputTextBox for 'subject' */}
         <InputTextBox
           label="Subject"
           rows="1"
         />
+
+        {/*checkbox for subject */}
         <div>
-          <input 
+          {!checked.includes("subject") ? (<span><input 
             type="checkbox" 
             className= "checkBox" 
+            style ={{width:20, height:20}}
             onChange={(e) => handleCheckClick(e, "subject")} 
             checked={checked.includes("subject")} 
           />
-          <label><strong>Is your subject descriptive and interesting?</strong></label>
+          <label><strong>Is your subject descriptive and interesting?</strong></label></span>) : null}
         </div>
+
+        {/*Call to BodySplitter */}
         <BodySplitter/>
+
+        {/*checkbox for Body */}
         <div>
-          <input 
+          {!checked.includes("body") ?
+          (<span><input 
             type="checkbox" 
-            className= "checkBox" 
+            className= "checkBox"
+            style={{width:20, height:20}} 
             onChange={(e) => handleCheckClick(e, "body")} 
             checked={checked.includes("body")} 
           />
-          <label>Have you said everything you wanted to say?</label>
+          <label><strong>Have you said everything you wanted to say?</strong></label></span>) : null}
         </div>
       </div>
+
+      {/*Buttons */}
       <div>
         <br />
         <span>
           <p>{errMsg.length == 0 ? " " : errMsg}</p>
           <div class="buttons">
+            {/*Send button */}
             <CustomButton
               label="Send"
               onClick={handleSendClick}
               type="button"
               disabled={checked.length < 4}
             />
+            {/*Back button */}
             <CustomButton
               label="Back"
               onClick={() => handleBackClick()}
               type="button"
               disabled={false}
             />
+            {/*Help button */}
             <CustomButton
               label="Help"
               onClick={() => handleRouteClick("/Help")}
