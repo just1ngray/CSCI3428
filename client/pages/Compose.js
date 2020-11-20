@@ -1,7 +1,7 @@
 /**Same For Reply.js
  * Set the local state of email components
  * posdt email
- *
+ * 
  */
 import { useState } from "react";
 import store from "../store";
@@ -12,7 +12,6 @@ import InputTextBox from "./components/InputTextBox";
 import BodySplitter from "./components/BodySplitter";
 import Layout from "./components/StudentLayout";
 import axios from "axios";
-import Tippy from "@tippy.js/react";
 import defaults from "../utils/defaults";
 import AutoCompleteText from "./components/AutoCompleteText";
 
@@ -49,17 +48,12 @@ export default function () {
     router.push(route);
   }
 
+  {/*This function handles the back button */}
   function handleBackClick() {
-    router.back();
+    router.back()
   }
 
-  function handleHelp(helpType) {
-    switch (helpType) {
-      case "cc":
-        return "This is a CC";
-    }
-  }
-
+  {/*This function handles a click on the checkboxes */}
   function handleCheckClick(event, label) {
     const copyChecked = [...checked];
     if (event.target.checked) {
@@ -71,6 +65,7 @@ export default function () {
     setChecked(copyChecked);
   }
 
+  {/*Message to be displayed when any checkbox is unchecked */}
   let errMsg = "";
   if (!checked.includes("to")) {
     errMsg = "Remember to check the to box!";
@@ -88,67 +83,102 @@ export default function () {
         <PageTitle title={`COMPOSING MESSAGE`} />{" "}
         {/* is user_id the from._id */}
       </div>
+
+      {/*div for email content */}
       <div>
         <AutoCompleteText label="To" placeholder="Email of the recipient" />
-        {/* <InputTextBox label="To" rows="1" /> */}
+
+        {/*checkbox for "to" */}
         <div>
-          <input
+          {!checked.includes("to") ?
+          (<span><input
             type="checkbox"
             className="checkBox"
+            style = {{width: 20, height: 20}}
             onChange={(e) => handleCheckClick(e, "to")}
             checked={checked.includes("to")}
           />
-          <label>Are you sending this email to the right person?</label>
+          <label><strong>Are you sending this email to the right person?</strong></label></span>) : null}
         </div>
+        
+
         <InputTextBox label="CC" rows="1" />
-        <Tippy content={handleHelp("cc")}>
-          <input
+
+        {/*checkbox for "cc" */}
+        <div>
+          {!checked.includes("cc") ? 
+          (<span><input
             type="checkbox"
             className="checkBox"
+            style = {{width : 20, height: 20}}
             onChange={(e) => handleCheckClick(e, "cc")}
             checked={checked.includes("cc")}
           />
-        </Tippy>
+          <label><strong>Do you want to send this email to another person or other poeple?</strong></label></span>) : null}
+          </div>
+
         <InputTextBox label="Subject" rows="1" />
+
+        {/*checkbox for "subject" */}
         <div>
-          <input
+          {!checked.includes("subject") ? 
+          (<span><input
             type="checkbox"
             className="checkBox"
+            style= {{width: 20, height: 20}}
             onChange={(e) => handleCheckClick(e, "subject")}
             checked={checked.includes("subject")}
           />
           <label>
             <strong>Is your subject descriptive and interesting?</strong>
-          </label>
+          </label></span>) : null}
         </div>
+
         <BodySplitter />
+
+        {/*checkbox for "body" */}
         <div>
-          <input
+          {!checked.includes("body") ? 
+          (<span><input
             type="checkbox"
             className="checkBox"
+            style= {{width: 20, height: 20}}
             onChange={(e) => handleCheckClick(e, "body")}
             checked={checked.includes("body")}
           />
-          <label>Have you said everything you wanted to say?</label>
+          <label>
+            <strong>Have you said everything you wanted to say?</strong>
+          </label></span>) : null}
         </div>
-      </div>
+
+      {/*div for others features below the email content */}
       <div>
         <br />
         <span>
+
+          {/*message for unchecked checkboxes */}
           <p>{errMsg.length == 0 ? " " : errMsg}</p>
+
+          {/*buttons on the page */}
           <div className="buttons">
+
+            {/*Send button */}
             <CustomButton
               label="Send"
               onClick={handleSendClick}
               type="button"
               disabled={checked.length < 4}
             />
+
+            {/*Back button */}
             <CustomButton
               label="Back"
               onClick={() => handleBackClick()}
               type="button"
               disabled={false}
             />
+
+            {/*Help button */}
             <CustomButton
               label="Help"
               onClick={() => handleRouteClick("/Help")}
@@ -158,6 +188,7 @@ export default function () {
           </div>
         </span>
       </div>
+      </div>
     </Layout>
   );
-}
+  }
