@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const { db } = require("../models/Account");
+const auth = require("../middleware/auth");
 const Account = require("../models/Account");
 
 /**
@@ -15,6 +15,60 @@ router.get("/securityquestions/:email", async (req, res) => {
   } catch (err) {
     res.status(400).send(err);
   }
+});
+
+/**
+ * Get your contacts
+ * https://github.com/just1ngray/CSCI3428/wiki/HTTP-Endpoints#get-apiaccountcontacts-a
+ * @author Justin Gray (A00426753)
+ */
+router.get("/contacts", auth, (req, res) => {
+  const account = req.auth.account;
+  res.send(account.contacts);
+});
+
+/**
+ * Create a new contact
+ * https://github.com/just1ngray/CSCI3428/wiki/HTTP-Endpoints#post-apiaccountcontact-a
+ * @author Justin Gray (A00426573)
+ */
+router.post("/contact", auth, async (req, res) => {
+  const account = req.auth.account;
+  try {
+    const contactAcc = await Account.findOne({ email: req.body.email });
+    let contact = {
+      name: req.body.name,
+      email: req.body.email,
+    };
+    if (contactAcc) contact.account = contactAcc._id;
+
+    account.contacts.push(contact);
+    account.markModified("contacts");
+    await account.save();
+    res.send(account.contacts[account.contacts.length - 1]);
+  } catch (e) {
+    res.status(400).send(e.message);
+  }
+});
+
+/**
+ * Delete a contact
+ * https://github.com/just1ngray/CSCI3428/wiki/HTTP-Endpoints#delete-apiaccountcontactemail-a
+ * @author Justin Gray (A00426753)
+ */
+router.delete("/contact/:email", auth, (req, res) => {
+  const account = req.auth.account;
+
+  const index = account.contacts.map((c) => c.email).indexOf(req.params.email);
+  if (index == -1)
+    return res.status(404).send(`Contact with ${req.params.email} not found`);
+
+  const removed = account.contacts.splice(index, 1);
+  account.markModified("contacts");
+  account
+    .save()
+    .then(() => res.send(removed[0]))
+    .catch((err) => res.status(400).send(err.message));
 });
 
 /**
