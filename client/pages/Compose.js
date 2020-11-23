@@ -2,6 +2,7 @@
  * Set the local state of email components
  * posdt email
  * 
+ * @author Jay Patel (A00433907)
  */
 import { useState } from "react";
 import store from "../store";
@@ -86,6 +87,7 @@ export default function () {
 
       {/*div for email content */}
       <div>
+        {/*Field for "to" */}
         <AutoCompleteText label="To" placeholder="Email of the recipient" />
 
         {/*checkbox for "to" */}
@@ -101,7 +103,7 @@ export default function () {
           <label><strong>Are you sending this email to the right person?</strong></label></span>) : null}
         </div>
         
-
+        {/*field for "cc" */}
         <InputTextBox label="CC" rows="1" />
 
         {/*checkbox for "cc" */}
@@ -114,9 +116,12 @@ export default function () {
             onChange={(e) => handleCheckClick(e, "cc")}
             checked={checked.includes("cc")}
           />
-          <label><strong>Do you want to send this email to another person or other poeple?</strong></label></span>) : null}
+          <label><strong>Do you want to send this email to another person or other poeple?
+            </strong></label></span>) : 
+            null}
           </div>
 
+        {/*field for "subject" */}
         <InputTextBox label="Subject" rows="1" />
 
         {/*checkbox for "subject" */}
@@ -134,6 +139,7 @@ export default function () {
           </label></span>) : null}
         </div>
 
+        {/*call to BodySplitter component */}
         <BodySplitter />
 
         {/*checkbox for "body" */}
@@ -191,4 +197,4 @@ export default function () {
       </div>
     </Layout>
   );
-  }
+}
