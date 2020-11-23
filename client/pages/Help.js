@@ -1,7 +1,7 @@
 /**
  * This file displays a help page
  *
- * @author
+ * @author Tiffany Conrad (A00414194)
  */
 import React from "react";
 import Layout from "./components/StudentLayout";

@@ -1,5 +1,17 @@
+/**
+ * 
+ *Creates an accordion to hold FAQs
+
+ @author Tiffany Conrad (A00414194)
+ */
 import React, {useState, useRef} from 'react';
 import styles from "../../styles/accordion.module.css";
+
+/**
+ * Makes the accordion
+ * @author Tiffany Conrad (A00414194)
+ * @param props 
+ */
 export default function Accordion(props){
     const [setActive, setActiveState] = useState("");
     const [setHeight, setHeightState] = useState("0px");
