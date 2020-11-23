@@ -1,6 +1,6 @@
 /**
  * This file contains a navigation bar with routing
- * 
+ *
  * @author Nicholas Morash (A00378981)
  */
 
@@ -15,10 +15,9 @@ import Head from "next/head";
  * @param {*} title the title of the app
  */
 export default function Layout({ children, title = "Email App" }) {
-  
   //On logout, removes data from localStorage.
   function handleClick() {
-    console.log("trying to :( CLEARING LOCAL STORAGE")
+    console.log("trying to :( CLEARING LOCAL STORAGE");
     localStorage.clear();
   }
 
@@ -41,6 +40,10 @@ export default function Layout({ children, title = "Email App" }) {
           |==|
           <Link href="/SentItems">
             <a>Sent Mail</a>
+          </Link>
+          |==|
+          <Link href="/AddressBook">
+            <a>AddressBook</a>
           </Link>
           |==|
           <Link href="/" onClick={() => handleClick()}>
