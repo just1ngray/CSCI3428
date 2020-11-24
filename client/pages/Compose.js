@@ -89,46 +89,55 @@ export default function () {
           rows="1"
         />
         <div>
-          <input 
+          {!checked.includes("to") ?
+          (<span><input 
             type="checkbox" 
             className= "checkBox" 
+            style={{width: 20, height: 20}}
             onChange={(e) => handleCheckClick(e, "to")} 
             checked={checked.includes("to")} 
           />
-          <label>Are you sending this email to the right person?</label>
+          <label><strong>Are you sending this email to the right person?</strong></label></span>) : null}
         </div>
         <InputTextBox 
             label="CC" 
             rows="1"  
         />
-        <Tippy content= {handleHelp("cc")}><input 
+        {!checked.includes("cc") ?
+        (<span><input 
           type="checkbox" 
           className= "checkBox" 
+          style={{width: 20, height: 20}}
           onChange={(e) => handleCheckClick(e, "cc")} 
           checked={checked.includes("cc")} 
-        /></Tippy>
+        />
+        <label><strong>Do you want to send this email to another person or other people?</strong></label></span>) : null}
         <InputTextBox
           label="Subject"
           rows="1"
         />
         <div>
-          <input 
+          {!checked.includes("subject") ? 
+            (<span><input 
             type="checkbox" 
             className= "checkBox" 
+            style={{width: 20, height: 20}}
             onChange={(e) => handleCheckClick(e, "subject")} 
             checked={checked.includes("subject")} 
           />
-          <label><strong>Is your subject descriptive and interesting?</strong></label>
+          <label><strong>Is your subject descriptive and interesting?</strong></label></span>) : null}
         </div>
         <BodySplitter/>
         <div>
-          <input 
+          {!checked.includes("body") ? 
+          (<span><input 
             type="checkbox" 
             className= "checkBox" 
+            style={{width: 20, height: 20}}
             onChange={(e) => handleCheckClick(e, "body")} 
             checked={checked.includes("body")} 
           />
-          <label>Have you said everything you wanted to say?</label>
+          <label><strong>Have you said everything you wanted to say?</strong></label></span>) : null}
         </div>
       </div>
       <div>
