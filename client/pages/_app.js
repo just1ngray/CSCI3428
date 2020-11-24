@@ -8,7 +8,6 @@
 import "../styles/globals.css";
 import "../styles/bulma.css";
 import "tippy.js/dist/tippy.css";
-import "../styles/Accordion.module.css"
 
 /**
  * This function applies CSS to website and loads other funtions as needed
