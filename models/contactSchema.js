@@ -9,7 +9,7 @@ module.exports = new mongoose.Schema({
     type: String,
     maxlength: 128,
     default: "",
-    required: true,
+    required: false,
   },
   email: {
     type: String,
