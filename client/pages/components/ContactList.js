@@ -96,7 +96,7 @@ export default function ContactList({ contact }) {
       </thead>
       <tbody>
         {uniqueContactInfo.map((item) => (
-          <tr key={item.id}>
+          <tr key={item._id}>
             <td>{item.name}</td>
             <td>{item.email}</td>
           </tr>

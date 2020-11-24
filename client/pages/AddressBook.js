@@ -15,17 +15,18 @@ import ContactList from "./components/ContactList";
 
 export default function AddressBook() {
   const [data, setData] = useState([]);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
 
   /**
    * This function perform POST request
    * Creates a contact with Name & Email
    */
   function handleCreateContact() {
-    const storeState = store.getState();
     const jwt = localStorage.getItem("token");
     const payload = {
-      name: `${storeState.contactName}`,
-      email: `${storeState.signInEmail}`,
+      name: `${name}`,
+      email: `${email}`,
     };
     axios
       .post(`${defaults.serverUrl}/account/contact`, payload, {
@@ -34,9 +35,14 @@ export default function AddressBook() {
         },
       })
       .then((res) => {
-        setData(res.data);
+        setData(res.data); // {name,email,_id}
       })
-      .catch((err) => {});
+      .catch((err) => {})
+      .finally(() => {
+        // clear the input boxes
+        setName("");
+        setEmail("");
+      });
   }
 
   return (
@@ -46,8 +52,19 @@ export default function AddressBook() {
         <div>
           <PageTitle title="ADDRESS BOOK" />
         </div>
-        <InputTextBox label="Name" rows="1" placeholder="Contact's Name" />
-        <InputTextBox label="Email" rows="1" placeholder="Contact's Email" />
+
+        <input
+          className="input"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Contact's Name"
+        />
+        <input
+          className="input"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Contact's Email"
+        />
         <CustomButton
           class="button is-primary"
           label="Create Contact"

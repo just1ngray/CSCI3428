@@ -35,6 +35,8 @@ export default function AutoCompleteText({ label, placeholder }) {
       .then((response) => {
         setEmails(response.data);
       });
+
+    // TODO @bivashpandey send get request for contacts
   }, []);
 
   /**
