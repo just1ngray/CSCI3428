@@ -3,7 +3,7 @@
  *
  * Bivash Pandey (A00425523)
  */
-import React from "react";
+import React, { useState } from "react";
 import store from "../store";
 import axios from "axios";
 import defaults from "../utils/defaults";
@@ -14,6 +14,8 @@ import InputTextBox from "./components/InputTextBox";
 import ContactList from "./components/ContactList";
 
 export default function AddressBook() {
+  const [data, setData] = useState([]);
+
   /**
    * This function perform POST request
    * Creates a contact with Name & Email
@@ -32,7 +34,7 @@ export default function AddressBook() {
         },
       })
       .then((res) => {
-        console.log(res);
+        setData(res.data);
       })
       .catch((err) => {});
   }
@@ -44,8 +46,8 @@ export default function AddressBook() {
         <div>
           <PageTitle title="ADDRESS BOOK" />
         </div>
-        <InputTextBox label="Name" rows="1" />
-        <InputTextBox label="Email" rows="1" />
+        <InputTextBox label="Name" rows="1" placeholder="Contact's Name" />
+        <InputTextBox label="Email" rows="1" placeholder="Contact's Email" />
         <CustomButton
           class="button is-primary"
           label="Create Contact"
@@ -55,7 +57,7 @@ export default function AddressBook() {
         />
         <div>
           <br />
-          <ContactList />
+          <ContactList contact={data} />
         </div>
       </Layout>
     </div>

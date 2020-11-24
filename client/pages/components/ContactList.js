@@ -7,11 +7,14 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import defaults from "../../utils/defaults";
 
-export default function ContactList() {
+export default function ContactList({ contact }) {
   // This is for the data related to sent emails
   const [sentInfo, setSentInfo] = useState([]);
   // This is for the data related to added contact
   const [addedInfo, setAddedInfo] = useState([]);
+
+  // add recently created into addedInfo
+  addedInfo.push(contact);
 
   // This array will store the name and email
   var contactInfo = [];
