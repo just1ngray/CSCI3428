@@ -3,24 +3,24 @@
  *
  * @author
  */
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from "react";
 import store from "../store";
 import { useRouter } from "next/router";
 import CustomButton from "./components/CustomButton";
 import PageTitle from "./components/PageTitle";
 import TextBox from "./components/TextBox";
 import InputTextBox from "./components/InputTextBox";
-import Layout from "./components/StudentLayout";
+import Layout from "./components/Layout";
 import defaults from "../utils/defaults";
 import * as Formatter from "../utils/formatter";
-import axios from 'axios';
+import axios from "axios";
 /**
  * This function returns the reply page
  */
 export default function Reply() {
   const router = useRouter(); // Routes inside functions.
-  const [email, setEmail] = useState({})
-  
+  const [email, setEmail] = useState({});
+
   useEffect(() => {
     const e = JSON.parse(localStorage.getItem("emailData"));
     setEmail(e);
@@ -47,7 +47,7 @@ export default function Reply() {
       const formatted = email.subject;
       store.dispatch({
         type: "setSubject",
-        payload: "RE: " + formatted
+        payload: "RE: " + formatted,
       });
       return "RE: " + formatted;
     } catch (err) {
@@ -65,7 +65,7 @@ export default function Reply() {
       const formatted = email.body;
       store.dispatch({
         type: "setBody",
-        payload: prefix + formatted + suffix
+        payload: prefix + formatted + suffix,
       });
       return prefix + formatted + suffix;
     } catch (err) {
@@ -86,17 +86,22 @@ export default function Reply() {
       from: undefined, // use account's default identity according to the JWT
       to: [{ email: email.from.email }],
       cc: [],
-      bcc: []
-    }
+      bcc: [],
+    };
 
     console.log(storeState);
     console.log(payload);
-    
-    axios.post(`${defaults.serverUrl}/email`, payload, {
-      headers: {
-        "x-auth-token": jwt
-      }
-    }).then(res => {router.push("/Inbox")}).catch(err=> {});
+
+    axios
+      .post(`${defaults.serverUrl}/email`, payload, {
+        headers: {
+          "x-auth-token": jwt,
+        },
+      })
+      .then((res) => {
+        router.push("/Inbox");
+      })
+      .catch((err) => {});
   }
 
   /**
