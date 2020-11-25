@@ -1,16 +1,16 @@
 /**Same For Reply.js
  * Set the local state of email components
  * posdt email
- * 
+ *
  */
 import { useState } from "react";
-import store from '../store';
-import { useRouter } from 'next/router';
+import store from "../store";
+import { useRouter } from "next/router";
 import CustomButton from "./components/CustomButton";
 import PageTitle from "./components/PageTitle";
-import InputTextBox from './components/InputTextBox';
-import BodySplitter from './components/BodySplitter';
-import Layout from './components/StudentLayout';
+import InputTextBox from "./components/InputTextBox";
+import BodySplitter from "./components/BodySplitter";
+import Layout from "./components/Layout";
 import axios from "axios";
 import Tippy from "@tippy.js/react";
 import defaults from "../utils/defaults";
@@ -27,32 +27,36 @@ export default function () {
       subject: `${storeState.subText}`,
       body: `${storeState.greeting}\n${storeState.message}\n${storeState.closing}`,
       from: undefined, // use account's default identity according to the JWT
-      to: [{ email:`${storeState.toText}`}],
+      to: [{ email: `${storeState.toText}` }],
       cc: [],
-      bcc: []
-    }
-    
-    axios.post(`${defaults.serverUrl}/email`, payload, {
-      headers: {
-        "x-auth-token": jwt
-      }
-    }).then(res => {router.push("/Inbox")}).catch(err=> {});
+      bcc: [],
+    };
+
+    axios
+      .post(`${defaults.serverUrl}/email`, payload, {
+        headers: {
+          "x-auth-token": jwt,
+        },
+      })
+      .then((res) => {
+        router.push("/Inbox");
+      })
+      .catch((err) => {});
   }
-  
+
   function handleRouteClick(route) {
-    router.push(route); 
+    router.push(route);
   }
 
   function handleBackClick() {
-    router.back()
+    router.back();
   }
 
-  function handleHelp (helpType) {
-    switch(helpType) {
+  function handleHelp(helpType) {
+    switch (helpType) {
       case "cc":
-        return "This is a CC"
+        return "This is a CC";
     }
-
   }
 
   function handleCheckClick(event, label) {
@@ -61,7 +65,7 @@ export default function () {
       if (!copyChecked.includes(label)) copyChecked.push(label);
     } else {
       const index = copyChecked.indexOf(label);
-      if (index >= 0) copyChecked.splice(index, 1); 
+      if (index >= 0) copyChecked.splice(index, 1);
     }
     setChecked(copyChecked);
   }
@@ -84,49 +88,44 @@ export default function () {
         {/* is user_id the from._id */}
       </div>
       <div>
-        <InputTextBox
-          label="To"
-          rows="1"
-        />
+        <InputTextBox label="To" rows="1" />
         <div>
-          <input 
-            type="checkbox" 
-            className= "checkBox" 
-            onChange={(e) => handleCheckClick(e, "to")} 
-            checked={checked.includes("to")} 
+          <input
+            type="checkbox"
+            className="checkBox"
+            onChange={(e) => handleCheckClick(e, "to")}
+            checked={checked.includes("to")}
           />
           <label>Are you sending this email to the right person?</label>
         </div>
-        <InputTextBox 
-            label="CC" 
-            rows="1"  
-        />
-        <Tippy content= {handleHelp("cc")}><input 
-          type="checkbox" 
-          className= "checkBox" 
-          onChange={(e) => handleCheckClick(e, "cc")} 
-          checked={checked.includes("cc")} 
-        /></Tippy>
-        <InputTextBox
-          label="Subject"
-          rows="1"
-        />
-        <div>
-          <input 
-            type="checkbox" 
-            className= "checkBox" 
-            onChange={(e) => handleCheckClick(e, "subject")} 
-            checked={checked.includes("subject")} 
+        <InputTextBox label="CC" rows="1" />
+        <Tippy content={handleHelp("cc")}>
+          <input
+            type="checkbox"
+            className="checkBox"
+            onChange={(e) => handleCheckClick(e, "cc")}
+            checked={checked.includes("cc")}
           />
-          <label><strong>Is your subject descriptive and interesting?</strong></label>
-        </div>
-        <BodySplitter/>
+        </Tippy>
+        <InputTextBox label="Subject" rows="1" />
         <div>
-          <input 
-            type="checkbox" 
-            className= "checkBox" 
-            onChange={(e) => handleCheckClick(e, "body")} 
-            checked={checked.includes("body")} 
+          <input
+            type="checkbox"
+            className="checkBox"
+            onChange={(e) => handleCheckClick(e, "subject")}
+            checked={checked.includes("subject")}
+          />
+          <label>
+            <strong>Is your subject descriptive and interesting?</strong>
+          </label>
+        </div>
+        <BodySplitter />
+        <div>
+          <input
+            type="checkbox"
+            className="checkBox"
+            onChange={(e) => handleCheckClick(e, "body")}
+            checked={checked.includes("body")}
           />
           <label>Have you said everything you wanted to say?</label>
         </div>
@@ -135,7 +134,7 @@ export default function () {
         <br />
         <span>
           <p>{errMsg.length == 0 ? " " : errMsg}</p>
-          <div class="buttons">
+          <div className="buttons">
             <CustomButton
               label="Send"
               onClick={handleSendClick}
@@ -156,7 +155,6 @@ export default function () {
             />
           </div>
         </span>
-        
       </div>
     </Layout>
   );
