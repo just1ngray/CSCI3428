@@ -1,7 +1,8 @@
 /**
  * This file contains a navigation bar with routing
- * 
+ *
  * @author Nicholas Morash (A00378981)
+ * @author Justin Gray (A00426753): re-vamped styling
  */
 
 // import Link to enable Routing
@@ -15,13 +16,6 @@ import Head from "next/head";
  * @param {*} title the title of the app
  */
 export default function Layout({ children, title = "Email App" }) {
-  
-  //On logout, removes data from localStorage.
-  function handleClick() {
-    console.log("trying to :( CLEARING LOCAL STORAGE")
-    localStorage.clear();
-  }
-
   return (
     <div>
       <Head>
@@ -31,24 +25,32 @@ export default function Layout({ children, title = "Email App" }) {
       </Head>
       <header>
         <nav className="navbar" role="navigation" aria-label="main navigation">
-          <Link href="/Inbox">
-            <a>Home</a>
-          </Link>{" "}
-          |==|
-          <Link href="/Compose">
-            <a>New Mail</a>
-          </Link>{" "}
-          |==|
-          <Link href="/SentItems">
-            <a>Sent Mail</a>
-          </Link>
-          |==|
-          <Link href="/" onClick={() => handleClick()}>
-            <a>Log Out</a>
-          </Link>
+          <div className="navbar-brand">
+            <a className="navbar-item">
+              <Link href="/Inbox">Inbox</Link>
+            </a>
+            <a className="navbar-item">
+              <Link href="/Compose">Compose</Link>
+            </a>
+            <a className="navbar-item">
+              <Link href="/SentItems">Sent Mail</Link>
+            </a>
+            <a
+              className="navbar-item"
+              onClick={() => {
+                console.log("Clearing localStorage");
+                localStorage.clear();
+                console.log("Localstorage cleared");
+              }}
+            >
+              <Link href="/">Logout</Link>
+            </a>
+          </div>
         </nav>
       </header>
+
       {children}
+
       <footer>{"IN DEVELOPMENT - PROTOTYPE BUILD 4"}</footer>
     </div>
   );

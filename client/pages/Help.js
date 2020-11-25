@@ -4,7 +4,7 @@
  * @author Tiffany Conrad (A00414194)
  */
 import React from "react";
-import Layout from "./components/StudentLayout";
+import Layout from "./components/Layout";
 import { useRouter } from "next/router";
 import CustomButton from "./components/CustomButton";
 import Accordion from "./components/Accordion";
