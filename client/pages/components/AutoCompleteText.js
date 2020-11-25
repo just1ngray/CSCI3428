@@ -13,7 +13,12 @@ import defaults from "../../utils/defaults";
 export default function AutoCompleteText({ label, placeholder }) {
   const [selectedOption, setSelectedOption] = useState([]);
   const [inputValue, setInputValue] = useState("");
+
+  // This is for the email related to previously sent emails
   const [emails, setEmails] = useState([]);
+
+  // This is for the email related to added contact into the addressbook
+  const [addedInfo, setAddedInfo] = useState([]);
 
   // This array is used to populate the input box for autocompletion
   var emailData = [];
@@ -35,8 +40,23 @@ export default function AutoCompleteText({ label, placeholder }) {
       .then((response) => {
         setEmails(response.data);
       });
+  }, []);
 
-    // TODO @bivashpandey send get request for contacts
+  /**
+   * This function performs GET request
+   * Gets all the contact information that have been created by the user
+   */
+  useEffect(() => {
+    const jwt = localStorage.getItem("token");
+    axios
+      .get(`${defaults.serverUrl}/account/contacts`, {
+        headers: {
+          "x-auth-token": jwt,
+        },
+      })
+      .then((response) => {
+        setAddedInfo(response.data);
+      });
   }, []);
 
   /**
@@ -76,6 +96,14 @@ export default function AutoCompleteText({ label, placeholder }) {
       uniqueEmail.add(e.email);
     })
   );
+
+  // loop through addedInfo and populate the emailData with emails from addressBook
+  addedInfo.map((e) => {
+    if (!uniqueEmail.has(e.email)) {
+      emailData.push({ label: `${e.email}`, value: `${e.email}` });
+    }
+    uniqueEmail.add(e.email);
+  });
 
   /**
    * This function retuns the help string
