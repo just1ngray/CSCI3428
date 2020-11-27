@@ -35,6 +35,9 @@ export default function Layout({ children, title = "Email App" }) {
             <a className="navbar-item">
               <Link href="/SentItems">Sent Mail</Link>
             </a>
+            <a className="navbar-item">
+              <Link href="/AddressBook">Address Book</Link>
+            </a>
             <a
               className="navbar-item"
               onClick={() => {
