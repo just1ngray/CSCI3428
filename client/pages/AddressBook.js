@@ -8,7 +8,7 @@ import store from "../store";
 import axios from "axios";
 import defaults from "../utils/defaults";
 import PageTitle from "./components/PageTitle";
-import Layout from "./components/StudentLayout";
+import Layout from "./components/Layout";
 import CustomButton from "./components/CustomButton";
 import InputTextBox from "./components/InputTextBox";
 import ContactList from "./components/ContactList";
