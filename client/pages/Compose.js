@@ -14,6 +14,7 @@ import BodySplitter from "./components/BodySplitter";
 import Layout from "./components/Layout";
 import axios from "axios";
 import defaults from "../utils/defaults";
+import AutoCompleteText from "./components/AutoCompleteText";
 
 export default function Compose() {
   const router = useRouter(); // Routes inside functions.
@@ -43,7 +44,7 @@ export default function Compose() {
       })
       .catch((err) => {});
   }
-  
+
   /*handles routing */
   function handleRouteClick(route) {
     router.push(route);
@@ -56,7 +57,9 @@ export default function Compose() {
     router.back();
   }
 
-  {/*handles the click on checkboxes */}
+  {
+    /*handles the click on checkboxes */
+  }
   function handleCheckClick(event, label) {
     const copyChecked = [...checked];
     if (event.target.checked) {
@@ -92,7 +95,7 @@ export default function Compose() {
 
       {/*div for email fields */}
       <div>
-        <InputTextBox label="To" rows="1" />
+        <AutoCompleteText label="To" placeholder="" />
         <div>
           {!checked.includes("to") ? (
             <span>
