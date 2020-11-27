@@ -11,7 +11,7 @@ import CustomButton from "./components/CustomButton";
 import PageTitle from "./components/PageTitle";
 import InputTextBox from "./components/InputTextBox";
 import BodySplitter from "./components/BodySplitter";
-import Layout from "./components/StudentLayout";
+import Layout from "./components/Layout";
 import axios from "axios";
 import defaults from "../utils/defaults";
 
@@ -43,10 +43,8 @@ export default function Compose() {
       })
       .catch((err) => {});
   }
-
-  {
-    /*handles routing */
-  }
+  
+  /*handles routing */
   function handleRouteClick(route) {
     router.push(route);
   }
@@ -58,9 +56,7 @@ export default function Compose() {
     router.back();
   }
 
-  {
-    /*handles the click on checkboxes */
-  }
+  {/*handles the click on checkboxes */}
   function handleCheckClick(event, label) {
     const copyChecked = [...checked];
     if (event.target.checked) {
@@ -96,10 +92,7 @@ export default function Compose() {
 
       {/*div for email fields */}
       <div>
-        {/*"To" field*/}
         <InputTextBox label="To" rows="1" />
-
-        {/*checkbox for "to" field */}
         <div>
           {!checked.includes("to") ? (
             <span>
