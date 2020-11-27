@@ -189,7 +189,7 @@ export default function Compose() {
         <br />
         <span>
           <p>{errMsg.length == 0 ? " " : errMsg}</p>
-          <div class="buttons">
+          <div className="buttons">
             {/*Send button */}
             <CustomButton
               label="Send"
