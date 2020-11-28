@@ -35,6 +35,12 @@ module.exports = async function verifyAccounts() {
       name: "Specialist",
       email: "specialist@autismns.ca",
       password: "password",
+      security: [
+        {
+          question: "The answer is 'abc'",
+          answer: "abc",
+        },
+      ],
       inbox: [],
       sent: [],
       contacts: [],
@@ -48,6 +54,12 @@ module.exports = async function verifyAccounts() {
       name: "Student",
       email: "student@autismns.ca",
       password: "password",
+      security: [
+        {
+          question: "The answer is 'abc'",
+          answer: "abc",
+        },
+      ],
       inbox: [],
       sent: [],
       contacts: [],

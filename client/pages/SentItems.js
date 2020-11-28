@@ -8,7 +8,7 @@ import React from "react";
 import CustomButton from "./components/CustomButton";
 import PageTitle from "./components/PageTitle";
 import { useRouter } from "next/router";
-import Layout from "./components/StudentLayout";
+import Layout from "./components/Layout";
 import EmailList from "./components/EmailList";
 
 export default function SentItems() {

@@ -9,6 +9,19 @@ import "../styles/globals.css";
 import "../styles/bulma.css";
 import "tippy.js/dist/tippy.css";
 
+import axios from "axios";
+axios.interceptors.response.use(
+  (res) => {
+    return res;
+  },
+  (err) => {
+    if (err.response.status === 401) {
+      localStorage.removeItem("token");
+      window.location.pathname = "/";
+    } else return Promise.reject(err);
+  }
+);
+
 /**
  * This function applies CSS to website and loads other funtions as needed
  *

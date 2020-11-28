@@ -1,5 +1,75 @@
 const router = require("express").Router();
+const auth = require("../middleware/auth");
 const Account = require("../models/Account");
+
+/**
+ * Get the security questions for an account
+ * https://github.com/just1ngray/CSCI3428/wiki/HTTP-Endpoints#get-apiaccountsecurityquestionsemail
+ * @author Justin Gray (A00426753)
+ */
+router.get("/securityquestions/:email", async (req, res) => {
+  try {
+    const account = await Account.findOne({ email: req.params.email });
+    const securityQuestions = account.security.map((qa) => qa.question);
+    res.send(securityQuestions);
+  } catch (err) {
+    res.status(400).send(err);
+  }
+});
+
+/**
+ * Get your contacts
+ * https://github.com/just1ngray/CSCI3428/wiki/HTTP-Endpoints#get-apiaccountcontacts-a
+ * @author Justin Gray (A00426753)
+ */
+router.get("/contacts", auth, (req, res) => {
+  const account = req.auth.account;
+  res.send(account.contacts);
+});
+
+/**
+ * Create a new contact
+ * https://github.com/just1ngray/CSCI3428/wiki/HTTP-Endpoints#post-apiaccountcontact-a
+ * @author Justin Gray (A00426573)
+ */
+router.post("/contact", auth, async (req, res) => {
+  const account = req.auth.account;
+  try {
+    const contactAcc = await Account.findOne({ email: req.body.email });
+    let contact = {
+      name: req.body.name,
+      email: req.body.email,
+    };
+    if (contactAcc) contact.account = contactAcc._id;
+
+    account.contacts.push(contact);
+    account.markModified("contacts");
+    await account.save();
+    res.send(account.contacts[account.contacts.length - 1]);
+  } catch (e) {
+    res.status(400).send(e.message);
+  }
+});
+
+/**
+ * Delete a contact
+ * https://github.com/just1ngray/CSCI3428/wiki/HTTP-Endpoints#delete-apiaccountcontactemail-a
+ * @author Justin Gray (A00426753)
+ */
+router.delete("/contact/:email", auth, (req, res) => {
+  const account = req.auth.account;
+
+  const index = account.contacts.map((c) => c.email).indexOf(req.params.email);
+  if (index == -1)
+    return res.status(404).send(`Contact with ${req.params.email} not found`);
+
+  const removed = account.contacts.splice(index, 1);
+  account.markModified("contacts");
+  account
+    .save()
+    .then(() => res.send(removed[0]))
+    .catch((err) => res.status(400).send(err.message));
+});
 
 /**
  * Login and receive a JSONWebToken.
@@ -37,6 +107,7 @@ router.post("/login", async (req, res) => {
 router.put("/change-credentials/:account_id", async (req, res) => {
   const account_id = req.params.account_id;
   const currentPW = req.body.currentPW;
+  const securityAns = req.body.security;
 
   // optionals
   const newEmail = req.body.newEmail;
@@ -47,8 +118,8 @@ router.put("/change-credentials/:account_id", async (req, res) => {
     const account = await Account.findById(account_id);
     if (!account) return res.status(404).send("Account not found.");
 
-    const isAuthed = await account.isValidPassword(currentPW);
-    if (!isAuthed) return res.status(403).send("Wrong current password.");
+    const isAuthed = await isAuth(account, currentPW, securityAns);
+    if (!isAuthed) return res.status(403).send("Not authorized.");
 
     if (newPW !== undefined) account.password = newPW;
     if (newEmail !== undefined) account.email = newEmail;
@@ -62,5 +133,29 @@ router.put("/change-credentials/:account_id", async (req, res) => {
     res.status(400).send(`${account_id} is not a valid Mongo ObjectID`);
   }
 });
+
+/**
+ * Find if a user is authorized for the specified account.
+ * @author Justin Gray (A00426753)
+ */
+async function isAuth(account, plainPW, security) {
+  if (plainPW) return await account.isValidPassword(plainPW);
+
+  function formatAnswer(ans) {
+    return ans.toLowerCase().replace(" ", "");
+  }
+
+  return new Promise((resolve) => {
+    account.security.forEach((dbqa) => {
+      const qa = security.filter(
+        (securityQuestion) => securityQuestion.question === dbqa.question
+      )[0];
+      if (formatAnswer(qa.answer) !== formatAnswer(dbqa.answer))
+        return resolve(false);
+    });
+
+    resolve(true);
+  });
+}
 
 module.exports = router;
