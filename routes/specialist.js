@@ -56,14 +56,36 @@ router.post("/sign-up", (req, res) => {
 });
 
 /**
+ * Gets all managed student accounts of the requesting specialist
+ * https://github.com/just1ngray/CSCI3428/wiki/HTTP-Endpoints#get-apispecialiststudents-a
+ * @author Justin Gray (A00426753)
+ */
+router.get("/students", [auth, populateChild], (req, res) => {
+  const specialist = req.auth.specialist;
+  if (!specialist) return res.status(403).send("You must be a specialist");
+
+  const students = [];
+  for (const stud_id of specialist.manages) {
+    students.push(Student.findById(stud_id).populate("account", "-password"));
+  }
+
+  Promise.all(students)
+    .then((stds) => res.send(stds))
+    .catch((err) => res.status(400).send(err));
+});
+
+/**
  * Create a new student account managed by a specialist
  * https://github.com/just1ngray/CSCI3428/wiki/HTTP-Endpoints#post-apispecialiststudent-a
  * @author Justin Gray (A00426753)
  */
-router.post("/student", [auth, populateChild], (req, res) => {
+router.post("/student", [auth, populateChild], async (req, res) => {
   const specialist = req.auth.specialist;
   if (specialist === undefined)
     return res.status(403).send("You must be a specialist.");
+
+  const emailAccount = await Account.findOne({ email: req.body.email });
+  if (emailAccount) return res.status(400).send("Duplicate email");
 
   const studAcc_id = mongoose.Types.ObjectId();
   const student_id = mongoose.Types.ObjectId();
@@ -82,6 +104,7 @@ router.post("/student", [auth, populateChild], (req, res) => {
   });
 
   const student = new Student({
+    _id: student_id,
     account: studAcc_id,
     specialist: specialist._id,
     settings: [],
@@ -95,12 +118,14 @@ router.post("/student", [auth, populateChild], (req, res) => {
       specialist.markModified("manages");
       specialist.save();
     })
-    .then(() =>
+    .then(() => {
+      const acc = studAcc._doc;
+      delete acc.password;
       res.send({
-        account_id: studAcc._id,
-        student_id: student._id,
-      })
-    )
+        account: acc,
+        student: student._doc,
+      });
+    })
     .catch(async (err) => {
       const savedAcc = await Account.findById(studAcc_id);
       const savedStud = await Specialist.findById(student_id);
