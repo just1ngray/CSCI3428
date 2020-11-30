@@ -23,17 +23,8 @@ export default function SentItems() {
     <Layout>
       <PageTitle title="SENT ITEMS" />
 
-      {/* To, and subject horizontal alignment and padding with styles*/}
-      <h4 className="card-title">
-        <span>
-          <u>To</u>
-        </span>
-        <span className="float-right">
-          <u>SUBJECT</u>
-        </span>
-      </h4>
       {/* List of EmailHeader components. */}
-      <EmailList userAuthor={true} />
+      <EmailList isSentPage={true} />
       <br />
 
       {/* Input, Compose and Help Button*/}
