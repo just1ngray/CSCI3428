@@ -140,9 +140,11 @@ function QuestionRow({
           onChange={(e) => setAnswer(e.target.value)}
           autoFocus={focused && readOnlyQuest}
         />
-        <button className="button" onClick={remove}>
-          X
-        </button>
+        {readOnlyQuest ? null : (
+          <button className="button" onClick={remove}>
+            X
+          </button>
+        )}
       </div>
     </div>
   );
