@@ -16,9 +16,9 @@ export default function DashboardStudent({ student, remove }) {
         backgroundColor: "#d9d9d9",
       }}
     >
-      <div style={{ display: "flex", width: "100%", alignItems: "center" }}>
-        <div style={{ flexGrow: 1 }}>{student.account.name}</div>
-        <div style={{ flexGrow: 1 }}>{student.account.email}</div>
+      <div style={{ display: "flex", width: "100%" }}>
+        <div className="column is-5">{student.account.name}</div>
+        <div className="column is-7">{student.account.email}</div>
       </div>
       <div>
         <button
