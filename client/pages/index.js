@@ -4,6 +4,7 @@
  * @version 0.4.0 (with axios and createaccount)
  * @author Nicholas Morash (A00378981) - v0.3.0
  * @author Justin Gray (A00426753) - v0.4.0
+ * @author Bivash Pandey (A00425523) - layout: spacing and centering
  */
 import { useRouter } from "next/router";
 import CustomButton from "./components/CustomButton";
@@ -56,28 +57,34 @@ export default function () {
   }
 
   return (
-    <div>
-      <div>
+    <div className="column is-half is-offset-one-quarter">
+      <div className="box">
         <form onSubmit={(e) => e.preventDefault()}>
           <label>
             Email:
             <input
+              className="input is-large"
               type="email"
               name="name"
               onChange={(e) => setUser(e.target.value)}
               value={user}
             />
+            <br />
           </label>
+          <br />
           <label>
             Password:
             <input
+              className="input is-large"
               type="password"
               name="password"
               onChange={(e) => setPword(e.target.value)}
               value={pword}
             />
+            <br />
           </label>
-          <span>
+          <br />
+          <div className="buttons is-centered">
             <CustomButton
               type="submit"
               label="Sign In"
@@ -89,7 +96,7 @@ export default function () {
               disabled={false}
               onClick={() => handleRouteClick("/CreateAccount")}
             />
-          </span>
+          </div>
         </form>
       </div>
     </div>
