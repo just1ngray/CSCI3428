@@ -1,5 +1,6 @@
 /**
  * This file displays a list of EmailHeader components in Sent Items and Inbox
+ * Users are now able to filter the emails
  *
  * @author Nicholas Morash (A00378981)
  * @author Bivash Pandey (A00425523) - search bar and its filter functionality
