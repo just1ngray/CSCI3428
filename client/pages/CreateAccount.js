@@ -78,7 +78,18 @@ export default function CreateAccount() {
           <hr />
         </div>
       ) : null}
-
+      <div className = "columns is-centered">
+      <article className="message is-info">
+        <div className="message-header">
+          <p>Attention Students!</p>
+        </div>
+        <div className="message-body">
+          Please contact a specialist if you do not currently have an account!
+        </div>
+        
+      </article>
+      </div>
+      <br></br>
       <InputBox
         label="Name"
         type="text"

@@ -5,6 +5,7 @@
  * @author Nicholas Morash (A00378981) - v0.3.0
  * @author Justin Gray (A00426753) - v0.4.0
  * @author Bivash Pandey (A00425523) - layout: spacing and centering
+ * @author Tiffany Conrad (A00414194) -Student memo
  */
 import { useRouter } from "next/router";
 import CustomButton from "./components/CustomButton";
@@ -60,6 +61,15 @@ export default function () {
     <div className="column is-half is-offset-one-quarter">
       <div className="box">
         <form onSubmit={(e) => e.preventDefault()}>
+          <article className="message is-info">
+            <div className="message-header">
+              <p>Attention Students!</p>
+            </div>
+            <div className="message-body">
+              Please contact a specialist if you do not currently have an
+              account!
+            </div>
+          </article>
           <label>
             Email:
             <input
@@ -92,7 +102,7 @@ export default function () {
               onClick={() => handleSignIn()}
             />
             <CustomButton
-              label="Create Account"
+              label="Create Specialist Account"
               disabled={false}
               onClick={() => handleRouteClick("/CreateAccount")}
             />
