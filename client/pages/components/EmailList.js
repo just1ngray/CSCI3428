@@ -2,7 +2,7 @@
  * This file displays a list of EmailHeader components in Sent Items and Inbox
  *
  * @author Nicholas Morash (A00378981)
- * @author Bivash ...
+ * @author Bivash Pandey (A00425523) - search bar and its filter functionality
  */
 
 import React, { useState, useEffect } from "react";
@@ -14,9 +14,12 @@ import defaults from "../../utils/defaults";
  * This component retrieves and renders a list of emails.
  * @props isSentPage    boolean, true if emails are sent mails
  */
-export default function EmailList({ isSentPage }) {
+export default function EmailListOld({ isSentPage }) {
   const [emails, setEmails] = useState([]);
   const [searchVal, setSearchVal] = useState("");
+  var completeEmail = [];
+  const matchedIndex = [];
+  var filteredEmails = [];
 
   // get all the emails
   useEffect(() => {
@@ -31,6 +34,7 @@ export default function EmailList({ isSentPage }) {
           return { ...eml, isViewing: true };
         });
         setEmails(data);
+        console.log(data);
       })
       .catch((err) => {
         console.error(err);
@@ -38,20 +42,44 @@ export default function EmailList({ isSentPage }) {
       });
   }, []);
 
-  // automatically runs when the searchVal is changed (and maybe first render?)
+  // automatically runs when the searchVal is changed
   useEffect(() => {
-    const copy = emails; // todo: implement deep clone
-
     if (searchVal.length === 0) {
-      // show all
       return;
     }
-
-    // based on searchVal, change emails[x].isViewing property
+    // based on searchVal
   }, [searchVal]);
 
-  // OR you may choose to have a button call processSearch
-  function processSearch() {}
+  // loop through the data received from database and store receivers detail in tempArray
+  // store concatenation of subject and body in completeEmail array
+  var tempArray = [];
+  emails.forEach((element) => {
+    completeEmail.push(element.subject + " " + element.body);
+    tempArray.push(element["to"]);
+  });
+
+  // loop through tempArray and replace completeEmail's data by adding name and email at front
+  let i = 0;
+  tempArray.forEach((element) => {
+    element.forEach((e) => {
+      completeEmail[i] = e.name + " " + e.email + " " + completeEmail[i];
+    });
+    i += 1;
+  });
+
+  // loop through completeEmail array and find the index of matched word with the user's search
+  // if there is a match, then store that index in matchedIndex array
+  for (var j = 0; j < completeEmail.length; j++) {
+    if (completeEmail[j].toLowerCase().includes(searchVal.toLowerCase())) {
+      matchedIndex.push(j);
+    }
+  }
+
+  // loop through matchedIndex array and filter the data that was received from database
+  // store those filtered data in filteredEmails which is later used to populate the list
+  for (var k = 0; k < matchedIndex.length; k++) {
+    filteredEmails.push(emails[matchedIndex[k]]);
+  }
 
   let content;
   if (!emails) content = <strong>Error: Could not retrieve emails</strong>;
@@ -59,7 +87,7 @@ export default function EmailList({ isSentPage }) {
     content = <strong>You have no emails in your mailbox!</strong>;
   else {
     content = [];
-    emails
+    filteredEmails
       .filter((email) => email.isViewing === true)
       .forEach((email) => {
         content.push(
@@ -74,12 +102,18 @@ export default function EmailList({ isSentPage }) {
 
   return (
     <div>
-      <input
-        value={searchVal}
-        onChange={(e) => setSearchVal(e.target.value)}
-        placeholder="Search todo"
-      />
-
+      <p className="control has-icons-left">
+        <input
+          className="input is-Large"
+          value={searchVal}
+          onChange={(e) => setSearchVal(e.target.value)}
+          placeholder="Search mail"
+        />
+        <span className="icon is-small is-left">
+          <i className="fas fa-search"></i>
+        </span>
+      </p>
+      <br />
       <h4 className="card-title">
         <span>
           <u>{isSentPage ? "To" : "From"}</u>
