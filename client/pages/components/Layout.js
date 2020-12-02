@@ -9,6 +9,7 @@
 import Link from "next/link";
 // import Head for appending elements to the 'head' of the page
 import Head from "next/head";
+import React, { useState, useEffect } from "react";
 
 /**
  * This function return the navigation bar with Home, New Mail and Sent Mail
@@ -16,6 +17,20 @@ import Head from "next/head";
  * @param {*} title the title of the app
  */
 export default function Layout({ children, title = "Email App" }) {
+  const [accountType, setAccountType] = useState("student");
+
+  useEffect(() => {
+    const type = localStorage.getItem("accType");
+    setAccountType(type || "student");
+  }, []);
+
+  const dashboardJSX =
+    accountType !== "specialist" ? null : (
+      <a className="navbar-item">
+        <Link href="/Dashboard">Dashboard</Link>
+      </a>
+    );
+
   return (
     <div>
       <Head>
@@ -25,7 +40,7 @@ export default function Layout({ children, title = "Email App" }) {
       </Head>
       <header>
         <nav className="navbar" role="navigation" aria-label="main navigation">
-          <div className="navbar-brand">
+          <div className="navbar-brand" style={{ flexWrap: "wrap" }}>
             <a className="navbar-item">
               <Link href="/Inbox">Inbox</Link>
             </a>
@@ -48,6 +63,7 @@ export default function Layout({ children, title = "Email App" }) {
             >
               <Link href="/">Logout</Link>
             </a>
+            {dashboardJSX}
           </div>
         </nav>
       </header>
