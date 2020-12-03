@@ -18,9 +18,9 @@ import defaults from "../../utils/defaults";
 export default function EmailListOld({ isSentPage }) {
   const [emails, setEmails] = useState([]);
   const [searchVal, setSearchVal] = useState("");
-  var completeEmail = [];
+  let completeEmail = [];
   const matchedIndex = [];
-  var filteredEmails = [];
+  let filteredEmails = [];
 
   // get all the emails
   useEffect(() => {
@@ -43,17 +43,9 @@ export default function EmailListOld({ isSentPage }) {
       });
   }, []);
 
-  // automatically runs when the searchVal is changed
-  useEffect(() => {
-    if (searchVal.length === 0) {
-      return;
-    }
-    // based on searchVal
-  }, [searchVal]);
-
   // loop through the data received from database and store receivers detail in tempArray
   // store concatenation of subject and body in completeEmail array
-  var tempArray = [];
+  let tempArray = [];
   emails.forEach((element) => {
     completeEmail.push(element.subject + " " + element.body);
     tempArray.push(element["to"]);
@@ -70,7 +62,7 @@ export default function EmailListOld({ isSentPage }) {
 
   // loop through completeEmail array and find the index of matched word with the user's search
   // if there is a match, then store that index in matchedIndex array
-  for (var j = 0; j < completeEmail.length; j++) {
+  for (let j = 0; j < completeEmail.length; j++) {
     if (completeEmail[j].toLowerCase().includes(searchVal.toLowerCase())) {
       matchedIndex.push(j);
     }
@@ -78,7 +70,7 @@ export default function EmailListOld({ isSentPage }) {
 
   // loop through matchedIndex array and filter the data that was received from database
   // store those filtered data in filteredEmails which is later used to populate the list
-  for (var k = 0; k < matchedIndex.length; k++) {
+  for (let k = 0; k < matchedIndex.length; k++) {
     filteredEmails.push(emails[matchedIndex[k]]);
   }
 
