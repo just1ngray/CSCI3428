@@ -3,6 +3,7 @@
  *
  * @author Nicholas Morash (A00378981)
  * @author Justin Gray (A00426753): re-vamped styling
+ * @author Jay Patel (A00433907)
  */
 
 // import Link to enable Routing
@@ -18,6 +19,7 @@ import React, { useState, useEffect } from "react";
  */
 export default function Layout({ children, title = "Email App" }) {
   const [accountType, setAccountType] = useState("student");
+  const [isActive, setisActive] = React.useState(false);
 
   useEffect(() => {
     const type = localStorage.getItem("accType");
@@ -39,31 +41,67 @@ export default function Layout({ children, title = "Email App" }) {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <header>
+        {/*navbar */}
         <nav className="navbar" role="navigation" aria-label="main navigation">
-          <div className="navbar-brand" style={{ flexWrap: "wrap" }}>
-            <a className="navbar-item">
-              <Link href="/Inbox">Inbox</Link>
+          <div className="navbar-brand">
+            {/*navbar logo at left */}
+            <a href="http://www.autismnovascotia.ca/" className="navbar-item">
+              <div className="is-size-3">
+                <strong>AUTISM NS</strong>
+              </div>
             </a>
-            <a className="navbar-item">
-              <Link href="/Compose">Compose</Link>
-            </a>
-            <a className="navbar-item">
-              <Link href="/SentItems">Sent Mail</Link>
-            </a>
-            <a className="navbar-item">
-              <Link href="/AddressBook">Address Book</Link>
-            </a>
+
+            {/*burger */}
             <a
-              className="navbar-item"
               onClick={() => {
-                console.log("Clearing localStorage");
-                localStorage.clear();
-                console.log("Localstorage cleared");
+                setisActive(!isActive);
               }}
+              role="button"
+              className={`navbar-burger burger ${isActive ? "is-active" : ""}`}
+              aria-label="menu"
+              aria-expanded="false"
+              data-target="navbarItems"
             >
-              <Link href="/">Logout</Link>
+              {/* (3 lines) */}
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
+              <span aria-hidden="true"></span>
             </a>
-            {dashboardJSX}
+          </div>
+
+          {/*list of items in navbar */}
+          <div
+            id="navbarItems"
+            className={`navbar-menu ${isActive ? "is-active" : ""}`}
+          >
+            <div className="navbar-end">
+              <div className="navbar-item">
+                {dashboardJSX}
+                <a className="navbar-item">
+                  <Link href="/Inbox">Inbox</Link>
+                </a>
+                <a className="navbar-item">
+                  <Link href="/Compose">Compose</Link>
+                </a>
+                <a className="navbar-item">
+                  <Link href="/SentItems">Sent Mail</Link>
+                </a>
+                <a className="navbar-item">
+                  <Link href="/AddressBook">Address Book</Link>
+                </a>
+                {/*clearing localStorage when logging out */}
+                <a
+                  className="navbar-item"
+                  onClick={() => {
+                    console.log("Clearing localStorage");
+                    localStorage.clear();
+                    console.log("Localstorage cleared");
+                  }}
+                >
+                  <Link href="/">Logout</Link>
+                </a>
+              </div>
+            </div>
           </div>
         </nav>
       </header>
