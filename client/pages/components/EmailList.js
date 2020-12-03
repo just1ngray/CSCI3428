@@ -6,7 +6,7 @@
  * @author Bivash Pandey (A00425523) - search bar and its filter functionality
  */
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import EmailHeader from "./EmailHeader";
 import defaults from "../../utils/defaults";
