@@ -36,7 +36,10 @@ router.put("/flag", auth, (req, res) => {
     newFlags = email.flags;
 
     account.markModified(box);
-    break;
+
+    // if an email is sent to themselves, then the email's flags should be modified
+    // in both the inbox and sent box. Thus we cannot break
+    //break;
   }
 
   if (newFlags === null) return res.status(404).send("Email not found");
