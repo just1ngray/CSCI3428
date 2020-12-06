@@ -114,7 +114,7 @@ export default function Compose() {
         </div>
 
         {/*"CC" field */}
-        <InputTextBox label="CC" rows="1" />
+        <InputTextBox label="CC" rows="1" isCC={true} />
 
         {/*checkbox for "CC" field */}
         <div>

@@ -1,5 +1,6 @@
 /**
  * This is a Address Book Page for creating and displaying contacts
+ * Users are not able to create a contact unless both name and email is entered
  *
  * Bivash Pandey (A00425523)
  */
@@ -10,13 +11,17 @@ import defaults from "../utils/defaults";
 import PageTitle from "./components/PageTitle";
 import Layout from "./components/Layout";
 import CustomButton from "./components/CustomButton";
-import InputTextBox from "./components/InputTextBox";
 import ContactList from "./components/ContactList";
 
 export default function AddressBook() {
   const [data, setData] = useState([]);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [name, setName] = useState(null);
+  const [email, setEmail] = useState(null);
+
+  // These variables are for checking if the Name and Email is valid
+  const isValidName =
+    (name || "").length > 0 && RegExp(/^\p{L}/, "u").test(name);
+  const isValidEmail = /.+@.+\..+/.test(email);
 
   /**
    * This function perform POST request
@@ -52,26 +57,40 @@ export default function AddressBook() {
         <div>
           <PageTitle title="ADDRESS BOOK" />
         </div>
-
-        <input
-          className="input"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          placeholder="Contact's Name"
-        />
-        <input
-          className="input"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Contact's Email"
-        />
-        <CustomButton
-          class="button is-primary"
-          label="Create Contact"
-          onClick={handleCreateContact}
-          type="button"
-          disabled={false}
-        />
+        <br />
+        <div className="field">
+          <div className="control">
+            <input
+              className={`input is-medium ${
+                name == null || isValidName ? "" : "is-danger"
+              }`}
+              value={name || ""}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Contact's Name"
+            />
+          </div>
+        </div>
+        <div className="field">
+          <div className="control">
+            <input
+              className={`input is-medium ${
+                email == null || isValidEmail ? "" : "is-danger"
+              }`}
+              value={email || ""}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Contact's Email"
+            />
+          </div>
+        </div>
+        <div className="control">
+          <CustomButton
+            class="button is-primary"
+            label="Create Contact"
+            onClick={handleCreateContact}
+            type="submit"
+            disabled={!isValidName || !isValidEmail}
+          />
+        </div>
         <div>
           <br />
           <ContactList contact={data} />
