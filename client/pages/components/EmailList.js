@@ -108,11 +108,6 @@ export default function EmailList({ isSentPage }) {
         </span>
       </p>
       <br />
-      {/* HELP! These are weird on small width screens */}
-      <div className="columns mx-5">
-        <div className="column is-4">{isSentPage ? "To" : "From"}</div>
-        <div className="column is-7">Subject</div>
-      </div>
 
       <div className="box">
         <p>{content}</p>
