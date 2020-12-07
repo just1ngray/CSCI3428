@@ -1,5 +1,6 @@
 /**
  * This file contains a component that generates input text box with autocomplete feature
+ * Moreover, it validates if the inputted or selected email is valid
  *
  * Bivash Pandey (A00425523)
  */
@@ -12,7 +13,12 @@ import defaults from "../../utils/defaults";
 
 export default function AutoCompleteText({ label, placeholder }) {
   const [selectedOption, setSelectedOption] = useState([]);
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState(null);
+  const [chosenEmail, setChosenEmail] = useState(null);
+
+  // These two variable checks if the inputted or selected email is valid
+  const isValidEmail = /.+@.+\..+/.test(inputValue);
+  const isValidChosenEmail = /.+@.+\..+/.test(chosenEmail);
 
   // This is for the email related to previously sent emails
   const [emails, setEmails] = useState([]);
@@ -70,6 +76,7 @@ export default function AutoCompleteText({ label, placeholder }) {
       type: `set${label}`,
       payload: value.value,
     });
+    setChosenEmail(value.value);
   }
 
   /**
@@ -105,6 +112,23 @@ export default function AutoCompleteText({ label, placeholder }) {
     uniqueEmail.add(e.email);
   });
 
+  // This function is for the styling of the autocomplete text field
+  // which is used in the "To" field of compose page
+  const customStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      borderBottom: "1px dotted black",
+      color: state.isSelected ? "yellow" : "black",
+      padding: 10,
+    }),
+    control: (base, state) => ({
+      ...base,
+      borderColor: null || isValidEmail || isValidChosenEmail ? "" : "red",
+      boxShadow: state.isFocused ? null : null,
+      height: 50,
+    }),
+  };
+
   /**
    * This function retuns the help string
    * @param {String} helpType word to be passed in switch statement
@@ -137,7 +161,6 @@ export default function AutoCompleteText({ label, placeholder }) {
           <strong>{label}</strong>
         </label>
       </Tippy>
-
       <CreatableSelect
         options={emailData}
         placeholder={placeholder}
@@ -145,6 +168,7 @@ export default function AutoCompleteText({ label, placeholder }) {
         onChange={handlingChange}
         onInputChange={handlingInputChange}
         autoFocus
+        styles={customStyles}
       />
     </div>
   );

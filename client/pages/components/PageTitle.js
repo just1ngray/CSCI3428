@@ -2,7 +2,7 @@
  * This file contains a component which is used to generate page titles
  * dynamically
  *
- * @author:
+ * @author: Bivash Pandey (A00425523)
  */
 import React from "react";
 /**
@@ -11,8 +11,8 @@ import React from "react";
  */
 function PageTitle({ title }) {
   return (
-    <div>
-      <h2>{title}</h2>
+    <div className="tag is-large is-warning">
+      <h2 className="title is-4">{title}</h2>
     </div>
   );
 }
