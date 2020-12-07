@@ -3,6 +3,7 @@
  * OnClick will redirect to ViewEmail with emailID
  * @author Nicholas Morash (A00378981) - initial implementation
  * @author Justin Gray (A00426753) - styling, flags, and deleting
+ * @author Jay Patel (A00433907) - Responsiveness
  */
 
 import React from "react";
@@ -17,14 +18,6 @@ export default function EmailHeader({ isViewerSender, email, remove, flag }) {
   let author = "";
   if (isViewerSender) author = Formatter.contacts(email.to);
   else author = Formatter.contact(email.from);
-
-  function formatSubject() {
-    const sub = email ? email.subject : "";
-    if (sub.length >= 20) {
-      return sub.substring(0, 20) + "...";
-    }
-    return sub;
-  }
 
   function handleClickEmail() {
     router.push(`/ViewEmail`);
@@ -91,7 +84,7 @@ export default function EmailHeader({ isViewerSender, email, remove, flag }) {
     <div
       style={{
         display: "flex",
-        justifyContent: "space-between",
+        marginBottom: "1px"
       }}
     >
       <button
@@ -100,11 +93,35 @@ export default function EmailHeader({ isViewerSender, email, remove, flag }) {
           width: "100%",
           height: "100%",
           textAlign: "left",
+          flex: 1,
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
         }}
         onClick={handleClickEmail}
       >
-        <div className="column is-5">{author}</div>
-        <div className="column is-7">{formatSubject()}</div>
+        <div
+          className=""
+          style={{
+            flex: 1,
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {author}
+        </div>
+        <div
+          className=""
+          style={{
+            flex: 1,
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
+        >
+          {email.subject}
+        </div>
       </button>
 
       <div className="field is-grouped" style={{ alignSelf: "center" }}>
@@ -113,7 +130,11 @@ export default function EmailHeader({ isViewerSender, email, remove, flag }) {
           className={`button is-warning ${
             !email.flags.includes("important") ? "is-light" : ""
           }`}
-          style={{ width: "40px", border: "1px solid #bfbfbf" }}
+          style={{
+            width: "40px",
+            border: "1px solid #bfbfbf",
+            display: "flex",
+          }}
           onClick={handleFlag}
         >
           <i className="fas fa-flag"></i>
