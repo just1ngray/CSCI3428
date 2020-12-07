@@ -7,6 +7,7 @@
  * @author Bivash Pandey (A00425523) - layout: spacing and centering
  * @author Tiffany Conrad (A00414194) -Student memo
  */
+import Link from "next/link";
 import { useRouter } from "next/router";
 import CustomButton from "./components/CustomButton";
 import axios from "axios";
@@ -17,7 +18,7 @@ import defaults from "../utils/defaults";
  * Main index page w/ login and link to account creation.
  * Redirects if the user is already logged in.
  */
-export default function () {
+export default function HomePage() {
   const router = useRouter();
   const [user, setUser] = useState("");
   const [pword, setPword] = useState("");
@@ -93,6 +94,11 @@ export default function () {
             />
             <br />
           </label>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Link href="/ForgotPassword">
+              <a>Forgot or Reset Password?</a>
+            </Link>
+          </div>
           <br />
           <div className="buttons is-centered">
             <CustomButton
