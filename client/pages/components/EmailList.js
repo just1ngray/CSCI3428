@@ -16,7 +16,7 @@ import filterEmails from "../../utils/filterEmails";
  * This component retrieves and renders a list of emails.
  * @props isSentPage    boolean, true if emails are sent mails
  */
-export default function EmailListOld({ isSentPage }) {
+export default function EmailList({ isSentPage }) {
   const [emails, setEmails] = useState([]);
   const [showEmailIndices, setShowEmailIndices] = useState([]);
   const [searchVal, setSearchVal] = useState("");
@@ -43,6 +43,34 @@ export default function EmailListOld({ isSentPage }) {
       });
   }, []);
 
+  /**
+   * Delete an email from the local state
+   * @param email_id the id of the email to delete
+   * @author Justin Gray (A00426753)
+   */
+  function deleteEmail(email_id) {
+    const emailCopy = JSON.parse(JSON.stringify(emails));
+    const index = emailCopy.map((e) => e._id).indexOf(email_id);
+    emailCopy.splice(index, 1);
+
+    setEmails(emailCopy);
+    setShowEmailIndices(filterEmails(emailCopy, searchVal));
+  }
+
+  /**
+   * Set the flags of an email in the local state
+   * @param email_id the id of the email to toggle the flag
+   * @param newFlags the new flags of the email
+   * @author Justin Gray (A00426753)
+   */
+  function flagEmail(email_id, newFlags) {
+    const emailCopy = JSON.parse(JSON.stringify(emails));
+    const index = emailCopy.map((e) => e._id).indexOf(email_id);
+
+    emailCopy[index].flags = newFlags;
+    setEmails(emailCopy);
+  }
+
   let content;
   if (!emails) content = <strong>Error: Could not retrieve emails</strong>;
   else if (emails.length == 0)
@@ -59,6 +87,8 @@ export default function EmailListOld({ isSentPage }) {
             key={email._id}
             email={email}
             isViewerSender={isSentPage}
+            remove={() => deleteEmail(email._id)}
+            flag={(newFlags) => flagEmail(email._id, newFlags)}
           />
         );
       });
@@ -78,14 +108,6 @@ export default function EmailListOld({ isSentPage }) {
         </span>
       </p>
       <br />
-      <h4 className="card-title">
-        <span>
-          <u>{isSentPage ? "To" : "From"}</u>
-        </span>
-        <span className="float-right">
-          <u>SUBJECT</u>
-        </span>
-      </h4>
 
       <div className="box">
         <p>{content}</p>
