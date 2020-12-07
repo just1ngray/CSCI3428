@@ -16,7 +16,13 @@ import store from "../../store";
  * @param {*} text initial text in the textbox
  * @param {boolean} isCC true if input text box is for CC otherwise false
  */
-export default function InputTextBox({ label, rows, placeholder, text, isCC }) {
+export default function InputTextBox({
+  label,
+  rows,
+  placeholder,
+  text,
+  isCC = false,
+}) {
   // variable state for initial state and setState is to set the state
   const [state, setState] = useState(text);
 
