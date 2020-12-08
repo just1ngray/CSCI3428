@@ -4,7 +4,7 @@
  * @author Nicholas Morash (A00378981)
  */
 
-import React, { useState } from "react";
+import React from "react";
 import CustomButton from "./components/CustomButton";
 import PageTitle from "./components/PageTitle";
 import { useRouter } from "next/router";
@@ -23,17 +23,8 @@ export default function Inbox() {
     <Layout>
       <PageTitle title="INBOX ITEMS" />
 
-      {/* To, and subject horizontal alignment and padding with styles*/}
-      <h4 className="card-title">
-        <span>
-          <u>From</u>
-        </span>
-        <span className="float-right">
-          <u>SUBJECT</u>
-        </span>
-      </h4>
       {/* List of EmailHeader components. */}
-      <EmailList userAuthor={false} />
+      <EmailList isSentPage={false} />
       <br />
 
       {/* Input, Compose and Help Button*/}

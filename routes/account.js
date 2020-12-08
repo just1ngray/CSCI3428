@@ -11,7 +11,10 @@ router.get("/securityquestions/:email", async (req, res) => {
   try {
     const account = await Account.findOne({ email: req.params.email });
     const securityQuestions = account.security.map((qa) => qa.question);
-    res.send(securityQuestions);
+    res.send({
+      questions: securityQuestions,
+      account_id: String(account._id),
+    });
   } catch (err) {
     res.status(400).send(err);
   }

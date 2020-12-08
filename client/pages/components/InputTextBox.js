@@ -1,5 +1,6 @@
 /**
  * This file contains a component that generates input text box with different properties
+ * And it checks if email is valid; input is non-empty, if it's empty - it will display red box
  *
  * Bivash Pandey (A00425523)
  */
@@ -13,11 +14,22 @@ import store from "../../store";
  * @param {Number} rows the number of rows
  * @param {String} placeholder the placeholder to be displayed in InputTextBox
  * @param {*} text initial text in the textbox
+ * @param {boolean} isCC true if input text box is for CC otherwise false
  */
-export default function InputTextBox({ label, rows, placeholder, text }) {
+export default function InputTextBox({
+  label,
+  rows,
+  placeholder,
+  text,
+  isCC = false,
+}) {
   // variable state for initial state and setState is to set the state
   const [state, setState] = useState(text);
 
+  // This variable keep tracks if there is any input in the box or not
+  const isValidText = (state || "").length > 0;
+  // This variable checks if the email is invalid in CC
+  const isValidEmail = /.+@.+\..+/.test(state);
   /**
    * This function handles the event when some values are changed
    *
@@ -56,21 +68,39 @@ export default function InputTextBox({ label, rows, placeholder, text }) {
         return "";
     }
   }
-
   return (
-    <div className="field">
+    <div>
       <Tippy content={handleHelp(label)}>
-        <label><strong>{label}</strong></label>
+        <label>
+          <strong>{label}</strong>
+        </label>
       </Tippy>
-      <textarea
-        className="textarea is-info"
-        readOnly={false}
-        rows={rows}
-        cols={80}
-        onChange={handleChange}
-        value={state}
-        placeholder={placeholder}
-      />
+      {isCC == true ? (
+        <div className="field">
+          <input
+            className={`input is-medium ${
+              state == null || isValidEmail ? "" : "is-danger"
+            }`}
+            onChange={handleChange}
+            value={state}
+            placeholder={placeholder}
+          />
+        </div>
+      ) : (
+        <div className="field">
+          <textarea
+            className={`textarea is-info ${
+              state == null || isValidText ? "" : "is-danger"
+            }`}
+            readOnly={false}
+            rows={rows}
+            cols={80}
+            onChange={handleChange}
+            value={state}
+            placeholder={placeholder}
+          />
+        </div>
+      )}
     </div>
   );
 }

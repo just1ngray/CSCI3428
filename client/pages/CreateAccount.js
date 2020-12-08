@@ -1,13 +1,15 @@
 /**
  * CreateAccount page. Interactive way to create a specialist account
  * on the server.
- * @author Justin Gray (A00426753)
+ * @author Justin Gray (A00426753) - everything but the "Attention Students"
+ *                                   which was done by Tiffany
  */
 import React, { useState } from "react";
 import axios from "axios";
 import CustomButton from "./components/CustomButton";
 import { useRouter } from "next/router";
 import defaults from "../utils/defaults";
+import QuestionManager from "./components/QuestionManager";
 
 export default function CreateAccount() {
   const router = useRouter();
@@ -17,6 +19,7 @@ export default function CreateAccount() {
   const [password, setPassword] = useState(null);
   const [passwordConfirm, setPasswordConfirm] = useState(null);
   const [email, setEmail] = useState(null);
+  const [questions, setQuestions] = useState([]);
 
   const [isSending, setIsSending] = useState(false);
   const [msgJSX, setMsgJSX] = useState(null);
@@ -44,6 +47,7 @@ export default function CreateAccount() {
         name,
         password,
         email,
+        security: questions,
       })
       .then(() => {
         setMsgJSX(
@@ -70,6 +74,12 @@ export default function CreateAccount() {
   const isValidPW = (password || "").length > 1;
   const isConfirmPW = isValidPW && password === passwordConfirm;
 
+  let isValidQuestions = questions.length >= 2;
+  questions.forEach((q) => {
+    isValidQuestions =
+      isValidQuestions && q.answer.length > 0 && q.question.length > 0;
+  });
+
   return (
     <form onSubmit={(e) => e.preventDefault()} className="container">
       {msgJSX ? (
@@ -78,7 +88,17 @@ export default function CreateAccount() {
           <hr />
         </div>
       ) : null}
-
+      <div className="columns is-centered">
+        <article className="message is-info">
+          <div className="message-header">
+            <p>Attention Students!</p>
+          </div>
+          <div className="message-body">
+            Please contact a specialist if you do not currently have an account!
+          </div>
+        </article>
+      </div>
+      <br></br>
       <InputBox
         label="Name"
         type="text"
@@ -108,12 +128,21 @@ export default function CreateAccount() {
         isValid={passwordConfirm == null || isConfirmPW}
       />
 
+      <QuestionManager
+        prefix="Security Question"
+        questions={questions}
+        setQuestions={setQuestions}
+      />
+
+      <hr />
+
       <div className="columns is-centered">
         <HelpMsg
           isConfirmPW={isConfirmPW}
           isValidEmail={isValidEmail}
           isValidName={isValidName}
           isValidPW={isValidPW}
+          isValidQuestions={isValidQuestions}
         />
       </div>
       <div className="columns is-centered">
@@ -126,6 +155,7 @@ export default function CreateAccount() {
             !isValidEmail ||
             !isValidPW ||
             !isConfirmPW ||
+            !isValidQuestions ||
             isSending
           }
         />
@@ -148,11 +178,19 @@ function InputBox({ label, val, setVal, type, isValid }) {
   );
 }
 
-function HelpMsg({ isValidEmail, isValidPW, isValidName, isConfirmPW }) {
+function HelpMsg({
+  isValidEmail,
+  isValidPW,
+  isValidName,
+  isConfirmPW,
+  isValidQuestions,
+}) {
   if (!isValidName) return <p>Please enter a name</p>;
   if (!isValidEmail) return <p>Please enter a valid email address</p>;
   if (!isValidPW) return <p>Please enter a password</p>;
   if (!isConfirmPW) return <p>Please confirm your password</p>;
+  if (!isValidQuestions)
+    return <p>Please enter at least two security questions</p>;
 
   return <p>&nbsp;</p>;
 }

@@ -5,6 +5,52 @@ const mongoose = require("mongoose");
 const auth = require("../middleware/auth");
 
 /**
+ * Change the flags of an email
+ * https://github.com/just1ngray/CSCI3428/wiki/HTTP-Endpoints#put-apiemailflag-a
+ * @author Justin Gray (A00426753)
+ */
+router.put("/flag", auth, (req, res) => {
+  const account = req.auth.account;
+  const email_id = req.body.email_id;
+  const modifications = req.body.modifications;
+
+  if (typeof email_id !== "string")
+    return res.status(400).send("Invalid email_id in body");
+  if (
+    typeof modifications !== "object" ||
+    typeof modifications.add !== "object" ||
+    typeof modifications.remove !== "object"
+  )
+    return res.status(400).send("Invalid flag modifications");
+
+  let newFlags = null;
+  for (const box of ["inbox", "sent"]) {
+    const email = account[box].filter((e) => e.email == email_id)[0];
+    if (!email) continue;
+
+    const flags = email.flags.filter((f) => !modifications.remove.includes(f));
+    modifications.add
+      .filter((f) => !flags.includes(f))
+      .forEach((f) => flags.push(f));
+    email.flags = [...flags];
+    newFlags = email.flags;
+
+    account.markModified(box);
+
+    // if an email is sent to themselves, then the email's flags should be modified
+    // in both the inbox and sent box. Thus we cannot break
+    //break;
+  }
+
+  if (newFlags === null) return res.status(404).send("Email not found");
+
+  account
+    .save()
+    .then(() => res.send(newFlags))
+    .catch((err) => res.status(400).send(err));
+});
+
+/**
  * Send an email to anyone in the system
  * https://github.com/just1ngray/CSCI3428/wiki/HTTP-Endpoints#post-apiemail-a
  * @author Justin Gray (A00426753)
@@ -264,9 +310,12 @@ async function getEmails(account, email_ids) {
     classifiedEmails
       .filter((e) => typeof e !== "string") // it's string when DNE
       .forEach((e) => {
-        delete e.email.bcc;
-        e.email.flags = e.flags;
-        emails[e.type].push(e.email);
+        const formattedEmail = {
+          flags: [...e.flags],
+          ...e.email._doc,
+        };
+        delete formattedEmail.bcc;
+        emails[e.type].push(formattedEmail);
       });
 
     return emails;
