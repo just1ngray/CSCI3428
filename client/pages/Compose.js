@@ -40,7 +40,7 @@ export default function Compose() {
         },
       })
       .then((res) => {
-        router.push("/Inbox");
+        router.push("/SentItems");
       })
       .catch((err) => {});
   }
