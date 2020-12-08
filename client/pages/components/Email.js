@@ -20,10 +20,10 @@ import store from "../../store";
  * @param {Unique JSONWebToken to authenticate email access} token
  * @param {Boolean flag if email is "SENT(true)" or "INBOX(false)"} userAuthor
  */
-export default function Email({userAuthor}) {
+export default function Email({ userAuthor }) {
   const router = useRouter();
   const [email, setEmail] = useState({});
-  
+
   useEffect(() => {
     const e = JSON.parse(localStorage.getItem("emailData"));
     setEmail(e);
@@ -39,54 +39,55 @@ export default function Email({userAuthor}) {
     router.back();
   }
 
+  if (!email) {
+    router.push("/Inbox");
+    return <div></div>;
+  }
+
   return (
     <div>
-    <div>
-      <PageTitle title="VIEWING EMAIL" />
-    </div>
-    <div>
-      <TextBox
-        label="From"
-        rows="1"
-        text={Formatter.contact(email.from)}
-        setText={"test"}
-      />
-      <TextBox
-        label="To"
-        rows="1"
-        text={Formatter.contacts(email.to)}
-        setText={"test"}
-      />
-      <TextBox label="CC" rows="1" text={Formatter.contacts(email.cc)} />
-      <TextBox
-        label="Subject"
-        rows="1"
-        text={email.subject}
-      />
-      <TextBox label="Body" rows="10" text={email.body} />
-    </div>
-    <div>
-      <span>
-        <CustomButton
+      <div>
+        <PageTitle title="VIEWING EMAIL" />
+      </div>
+      <div>
+        <TextBox
+          label="From"
+          rows="1"
+          text={Formatter.contact(email.from)}
+          setText={"test"}
+        />
+        <TextBox
+          label="To"
+          rows="1"
+          text={Formatter.contacts(email.to)}
+          setText={"test"}
+        />
+        <TextBox label="CC" rows="1" text={Formatter.contacts(email.cc)} />
+        <TextBox label="Subject" rows="1" text={email.subject} />
+        <TextBox label="Body" rows="10" text={email.body} />
+      </div>
+      <div>
+        <span>
+          <CustomButton
             label="Reply"
             onClick={() => handleRouteClick("/Reply")}
             type="button"
             disabled={false}
-        />
-        <CustomButton
-          label="Back"
-          onClick={() => handleBackClick()}
-          type="button"
-          disabled={false}
-        />
-        <CustomButton
-          label="Help"
-          onClick={() => handleRouteClick("/Help")}
-          type="button"
-          disabled={false}
-        />
-      </span>
+          />
+          <CustomButton
+            label="Back"
+            onClick={() => handleBackClick()}
+            type="button"
+            disabled={false}
+          />
+          <CustomButton
+            label="Help"
+            onClick={() => handleRouteClick("/Help")}
+            type="button"
+            disabled={false}
+          />
+        </span>
+      </div>
     </div>
-  </div>
   );
 }

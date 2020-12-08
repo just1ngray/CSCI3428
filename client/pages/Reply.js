@@ -23,6 +23,7 @@ export default function Reply() {
 
   useEffect(() => {
     const e = JSON.parse(localStorage.getItem("emailData"));
+    if (!e) router.push("/Inbox");
     setEmail(e);
     console.log(e);
   }, []);
@@ -119,7 +120,7 @@ export default function Reply() {
     router.push(route);
   }
 
-  if (email.body === undefined) return <div></div>; //internal bleed: bandaid fix
+  if (!email || !email.body) return <div></div>; //internal bleed: bandaid fix
 
   return (
     <Layout>
