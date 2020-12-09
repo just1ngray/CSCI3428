@@ -4,7 +4,7 @@
  *
  * @author Jay Patel (A00433907)
  */
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import store from "../store";
 import { useRouter } from "next/router";
 import CustomButton from "./components/CustomButton";
@@ -20,12 +20,23 @@ export default function Compose() {
   const router = useRouter(); // Routes inside functions.
   const [checked, setChecked] = useState([]);
 
+  useEffect(() => {
+    ["Subject", "To", "CC", "Body", "Greeting", "Message", "Closing"].forEach(
+      (stateFieldName) => {
+        store.dispatch({
+          type: `set${stateFieldName}`,
+          payload: " ",
+        });
+      }
+    );
+  }, []);
+
   function handleSendClick() {
     const storeState = store.getState();
     const jwt = localStorage.getItem("token");
 
     const payload = {
-      subject: `${storeState.subText}`,
+      subject: `${storeState.subText} `,
       body: `${storeState.greeting}\n${storeState.message}\n${storeState.closing}`,
       from: undefined, // use account's default identity according to the JWT
       to: [{ email: `${storeState.toText}` }],
@@ -42,7 +53,9 @@ export default function Compose() {
       .then((res) => {
         router.push("/SentItems");
       })
-      .catch((err) => {});
+      .catch((err) => {
+        console.log(err.response.data);
+      });
   }
 
   /*handles routing */
@@ -50,16 +63,12 @@ export default function Compose() {
     router.push(route);
   }
 
-  {
-    /*routes to the previous page */
-  }
+  /*routes to the previous page */
   function handleBackClick() {
     router.back();
   }
 
-  {
-    /*handles the click on checkboxes */
-  }
+  /* handles the click on checkboxes */
   function handleCheckClick(event, label) {
     const copyChecked = [...checked];
     if (event.target.checked) {
@@ -71,9 +80,7 @@ export default function Compose() {
     setChecked(copyChecked);
   }
 
-  {
-    /*message to be shown when atleast one checkbox is unchecked */
-  }
+  /*message to be shown when atleast one checkbox is unchecked */
   let errMsg = "";
   if (!checked.includes("to")) {
     errMsg = "Remember to check the to box!";

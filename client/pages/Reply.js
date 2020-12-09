@@ -1,7 +1,7 @@
 /**
  * This file displays a reply page with cc, subject, and body section
  *
- * @author
+ * @author Nicholas Morash
  */
 import React, { useState, useEffect } from "react";
 import store from "../store";
@@ -22,6 +22,15 @@ export default function Reply() {
   const [email, setEmail] = useState({});
 
   useEffect(() => {
+    ["Subject", "To", "CC", "Body", "Greeting", "Message", "Closing"].forEach(
+      (stateFieldName) => {
+        store.dispatch({
+          type: `set${stateFieldName}`,
+          payload: " ",
+        });
+      }
+    );
+
     const e = JSON.parse(localStorage.getItem("emailData"));
     if (!e) router.push("/Inbox");
     setEmail(e);
@@ -82,15 +91,14 @@ export default function Reply() {
     const jwt = localStorage.getItem("token");
 
     const payload = {
-      subject: `${storeState.subText}`,
-      body: `${storeState.bodyText}`,
+      subject: `${storeState.subText} `,
+      body: `${storeState.bodyText} `,
       from: undefined, // use account's default identity according to the JWT
       to: [{ email: email.from.email }],
       cc: [],
       bcc: [],
     };
 
-    console.log(storeState);
     console.log(payload);
 
     axios
