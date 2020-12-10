@@ -95,7 +95,7 @@ export default function Reply() {
       body: `${storeState.bodyText} `,
       from: undefined, // use account's default identity according to the JWT
       to: [{ email: email.from.email }],
-      cc: [],
+      cc: [{ email: `${storeState.ccText}` }],
       bcc: [],
     };
 

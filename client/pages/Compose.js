@@ -40,7 +40,7 @@ export default function Compose() {
       body: `${storeState.greeting}\n${storeState.message}\n${storeState.closing}`,
       from: undefined, // use account's default identity according to the JWT
       to: [{ email: `${storeState.toText}` }],
-      cc: [],
+      cc: [{ email: `${storeState.ccText}` }],
       bcc: [],
     };
 
