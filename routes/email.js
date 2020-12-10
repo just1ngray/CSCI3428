@@ -96,6 +96,17 @@ router.post("/", auth, async (req, res) => {
             flags: [],
             email: email._id,
           });
+          const senderContactKeys = sender.contacts.map(
+            (c) => `${c.name};${c.email}`
+          );
+          resolved
+            .slice(1, resolved.length)
+            .filter((c) => !senderContactKeys.includes(`${c.name};${c.email}`))
+            .forEach((c) => {
+              senderContactKeys.push(`${c.name};${c.email}`);
+              sender.contacts.push(c);
+              sender.markModified("contacts");
+            });
           sender.markModified("sent");
           sender.save();
 
