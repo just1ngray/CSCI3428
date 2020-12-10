@@ -109,9 +109,7 @@ export default function EmailList({ isSentPage }) {
       </p>
       <br />
 
-      <div className="box">
-        <p>{content}</p>
-      </div>
+      <div className="box">{content}</div>
     </div>
   );
 }

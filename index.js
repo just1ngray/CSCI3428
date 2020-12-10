@@ -13,28 +13,35 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+console.log("Starting...");
+
 // startup functions
 require("./startup/routes")(app); // setup '/api' routes
 require("./startup/database")
   .connect() // connect to MongoDB
   .then((didConnect) => {
-    if (didConnect) require("./startup/setupAccounts")();
+    if (didConnect) {
+      require("./startup/setupAccounts")();
+
+      /**
+       * Redirect any non-api requests to the front-end NextJS
+       * optimized server.
+       * NextJS can be run with:
+       *      $ npm run build
+       *      $ npm run client
+       * And will be started on port 3384.
+       * @author Justin Gray (A00426753)
+       */
+      app.get("*", (req, res) => {
+        res.redirect(301, `${req.hostname}:3384${req.url}`);
+      });
+
+      app.listen(port, (err) => {
+        if (err) throw err;
+        console.log(`Server listening on port ${port}`);
+      });
+    } else {
+      console.log("Closing the application, please install & run MongoDB");
+      process.exit(1);
+    }
   });
-
-/**
- * Redirect any non-api requests to the front-end NextJS
- * optimized server.
- * NextJS can be run with:
- *      $ npm run build
- *      $ npm run client
- * And will be started on port 3384.
- * @author Justin Gray (A00426753)
- */
-app.get("*", (req, res) => {
-  res.redirect(301, `${req.hostname}:3384${req.url}`);
-});
-
-app.listen(port, (err) => {
-  if (err) throw err;
-  console.log(`Server listening on port ${port}`);
-});
