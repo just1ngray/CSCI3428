@@ -1,6 +1,6 @@
 /**
  * Paginates a dataset to as many pages as needed.
- * @author Justin Gray (initial creation, but no styling)
+ * @author Justin Gray - all of it
  */
 import React from "react";
 
@@ -33,5 +33,5 @@ export default function Pagination({
     }
   );
 
-  return <div>{pages}</div>;
+  return <div className="buttons has-addons">{pages}</div>;
 }

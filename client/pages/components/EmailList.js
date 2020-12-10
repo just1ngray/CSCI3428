@@ -118,6 +118,10 @@ export default function EmailList({ isSentPage }) {
       </p>
       <br />
 
+      <div className="box" style={{ marginBottom: 1 }}>
+        <p>{content}</p>
+      </div>
+
       {showEmailIndices.length <= EMAILS_PER_PAGE ? null : (
         <Pagination
           itemsPerPage={EMAILS_PER_PAGE}
@@ -126,10 +130,6 @@ export default function EmailList({ isSentPage }) {
           currentPage={pageNum}
         />
       )}
-
-      <div className="box">
-        <p>{content}</p>
-      </div>
     </div>
   );
 }
