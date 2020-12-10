@@ -14,7 +14,7 @@ import defaults from "../../utils/defaults";
 import filterEmails from "../../utils/filterEmails";
 import Pagination from "./Pagination";
 
-const EMAILS_PER_PAGE = 20;
+const EMAILS_PER_PAGE = 2;
 
 /**
  * This component retrieves and renders a list of emails.
@@ -28,6 +28,7 @@ export default function EmailList({ isSentPage }) {
 
   useEffect(() => {
     setShowEmailIndices(filterEmails(emails, searchVal));
+    setPageNum(1);
   }, [searchVal]);
 
   // get all the emails
@@ -85,10 +86,9 @@ export default function EmailList({ isSentPage }) {
   else {
     content = [];
     emails
+      .filter((email, index) => showEmailIndices.includes(index))
       .filter(
-        (email, index) =>
-          showEmailIndices.includes(index) &&
-          Math.floor(index / EMAILS_PER_PAGE) + 1 == pageNum
+        (email, index) => Math.floor(index / EMAILS_PER_PAGE) + 1 == pageNum
       )
       .forEach((email) => {
         content.push(
