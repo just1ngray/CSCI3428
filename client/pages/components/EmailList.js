@@ -4,6 +4,7 @@
  *
  * @author Nicholas Morash (A00378981)
  * @author Bivash Pandey (A00425523) - search bar and its filter functionality
+ * @author Justin Gray (A00426753) - pagination functionality
  */
 
 import React, { useState, useEffect } from "react";
@@ -11,6 +12,9 @@ import axios from "axios";
 import EmailHeader from "./EmailHeader";
 import defaults from "../../utils/defaults";
 import filterEmails from "../../utils/filterEmails";
+import Pagination from "./Pagination";
+
+const EMAILS_PER_PAGE = 20;
 
 /**
  * This component retrieves and renders a list of emails.
@@ -20,9 +24,11 @@ export default function EmailList({ isSentPage }) {
   const [emails, setEmails] = useState([]);
   const [showEmailIndices, setShowEmailIndices] = useState([]);
   const [searchVal, setSearchVal] = useState("");
+  const [pageNum, setPageNum] = useState(1); // 1 indexed
 
   useEffect(() => {
     setShowEmailIndices(filterEmails(emails, searchVal));
+    setPageNum(1);
   }, [searchVal]);
 
   // get all the emails
@@ -81,6 +87,9 @@ export default function EmailList({ isSentPage }) {
     content = [];
     emails
       .filter((email, index) => showEmailIndices.includes(index))
+      .filter(
+        (email, index) => Math.floor(index / EMAILS_PER_PAGE) + 1 == pageNum
+      )
       .forEach((email) => {
         content.push(
           <EmailHeader
@@ -109,7 +118,18 @@ export default function EmailList({ isSentPage }) {
       </p>
       <br />
 
-      <div className="box">{content}</div>
+      <div className="box" style={{ marginBottom: 1 }}>
+        <p>{content}</p>
+      </div>
+
+      {showEmailIndices.length <= EMAILS_PER_PAGE ? null : (
+        <Pagination
+          itemsPerPage={EMAILS_PER_PAGE}
+          numItems={showEmailIndices.length}
+          setPage={setPageNum}
+          currentPage={pageNum}
+        />
+      )}
     </div>
   );
 }
