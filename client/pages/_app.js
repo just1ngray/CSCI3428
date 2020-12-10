@@ -30,20 +30,18 @@ axios.interceptors.response.use(
  */
 function MyApp({ Component, pageProps }) {
   return (
-    <div style={{ backgroundColor: "#a2bdbc" }}>
+    <div style={{ backgroundColor: "#a2bdbc", height: "100vh" }}>
       <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css"
         integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA="
         crossOrigin="anonymous"
       />
-      <body>
-        <section className="section">
-          <div className="container">
-            <Component {...pageProps} />
-          </div>
-        </section>
-      </body>
+      <section className="section">
+        <div className="container">
+          <Component {...pageProps} />
+        </div>
+      </section>
     </div>
   );
 }
