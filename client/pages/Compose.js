@@ -35,9 +35,18 @@ export default function Compose() {
     const storeState = store.getState();
     const jwt = localStorage.getItem("token");
 
+    const message = [
+      storeState.greeting,
+      storeState.message,
+      storeState.closing,
+    ]
+      .map((e) => e.trim())
+      .filter((e) => e.length > 0)
+      .join("\n");
+
     const payload = {
       subject: `${storeState.subText} `,
-      body: `${storeState.greeting}\n${storeState.message}\n${storeState.closing}`,
+      body: `${message} `,
       from: undefined, // use account's default identity according to the JWT
       to: [{ email: `${storeState.toText}` }],
       cc: [{ email: `${storeState.ccText}` }],
