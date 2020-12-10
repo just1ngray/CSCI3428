@@ -40,8 +40,7 @@ export default function Compose() {
       storeState.message,
       storeState.closing,
     ]
-      .map((e) => e.trim())
-      .filter((e) => e.length > 0)
+      .filter((e) => e.trim().length > 0)
       .join("\n");
 
     const payload = {
