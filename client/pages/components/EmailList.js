@@ -14,7 +14,7 @@ import defaults from "../../utils/defaults";
 import filterEmails from "../../utils/filterEmails";
 import Pagination from "./Pagination";
 
-const EMAILS_PER_PAGE = 2;
+const EMAILS_PER_PAGE = 20;
 
 /**
  * This component retrieves and renders a list of emails.
