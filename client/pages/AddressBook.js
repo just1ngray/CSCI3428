@@ -108,6 +108,7 @@ export default function AddressBook() {
               onChange={(e) => setName(e.target.value)}
               placeholder="Contact's Name"
               maxLength={128}
+              name="contactName"
             />
           </div>
         </div>
@@ -121,6 +122,7 @@ export default function AddressBook() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Contact's Email"
               maxLength={256}
+              name="contactEmail"
             />
           </div>
         </div>
