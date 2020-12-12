@@ -7,6 +7,7 @@
 import React from "react";
 
 export default function ContactRow({ contact, remove, isHeader = false }) {
+  if (!contact) return <div></div>; //satisfy Next build process
   const rowItem = {
     display: "inline-block",
     width: "50%",

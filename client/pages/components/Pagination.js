@@ -12,9 +12,9 @@ import React from "react";
  * @props setPage       set the new page to view
  */
 export default function Pagination({
-  numItems,
-  itemsPerPage,
-  currentPage,
+  numItems = 0,
+  itemsPerPage = 20,
+  currentPage = 1,
   setPage,
 }) {
   const pages = [];
