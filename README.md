@@ -3,6 +3,7 @@ This service-learning project for AutismNS is brought to you by Group #2:
 Bivash Pandey, Jay Patel, Justin Gray, Nikhil Bhardwaj, Nicholas Morash, and Tiffany Conrad.
 
 # Benefits of Our Group's Software
+- TODO
 
 # Installation
 To install and run this code, you need to have the following dependency programs installed:
@@ -11,19 +12,14 @@ To install and run this code, you need to have the following dependency programs
 
 Now you can set-up our software.
 1. Download the source code from https://github.com/just1ngray/CSCI3428/archive/master.zip, or `git clone https://github.com/just1ngray/CSCI3428.git`
-2. Open a terminal window in the unzipped folder and type: `npm run install-all`
-3. Now everything is installed and you can run the website (see steps 3a-3b). However, you will have to keep your terminal windows open whenever you 
-run the website, so continue to step 4 to resolve this issue.  
-    a) In one terminal window, type `npm run server`,  
-    b) And in another terminal window, type `npm run client`
-4. To run the website in the background, you will have to run some additional commands. If you have super-user permissions please continue to step 6,
-otherwise continue with step 5.
-5. Using `nohup`, you can run the website in the background.  
-    Step 1) `nohup node index > log.out &`  
-    Step 2) `exit`  
-    Step 3) `nohup npx next start > log.out &`  
-    Step 4) `exit`  
-    Step 5) To stop the website (or refresh after modifying the code), find the PID `ps -ef | grep node` and kill it using `kill -9 <PID>` where <PID>
-    is the PID of the process you want to kill.
-6. Install a npm package such as `forever` or `pm2`. This guide will show `pm2`:
-    Step 1) `sudo npm install pm2 -g`
+2. Open a terminal window in the [unzipped] folder and type: `npm run install-all`. This may take a while depending on your internet connection speed.
+3. Now everything is installed and you can run the website using `node index.js`. However, the website will only run as long as you keep the terminal open, so continue on to step 4 (if you have sudo privileges), or step 5 (if you don't have sudo privileges).
+4. With sudo privileges, type `sudo npm install -g pm2`. Then to run the website, `pm2 start index.js --name "email-app"`. Once you've initially added the `index.js` file to pm2's watchlist, you can:  
+    a) `pm2 stop email-app` to stop the website  
+    b) `pm2 status` to show the status of the website  
+    c) `pm2 monit` to see advanced monitoring information regarding the website  
+    d) `pm2 start email-app` to start a stopped website  
+    e) `pm2 restart email-app` to restart the website
+5. Without sudo privileges, you'll have to use nohup:  
+    a) `nohup node index > log.out &`, then `exit`  
+    b) To stop the website (or refresh after modifying the code), find the PID `ps -ef | grep node` and kill it using `kill -9 <PID>` where <PID> is the PID of the process you want to kill.
