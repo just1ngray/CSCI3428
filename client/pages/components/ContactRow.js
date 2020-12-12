@@ -24,6 +24,7 @@ export default function ContactRow({ contact, remove, isHeader = false }) {
         display: "flex",
         alignItems: "center",
       }}
+      className="auto-test-selector-contactrow"
     >
       <div style={rowItem}>{contact.name}</div>
       <div style={rowItem}>{contact.email}</div>
