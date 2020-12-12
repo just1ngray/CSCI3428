@@ -7,10 +7,11 @@
 import React from "react";
 
 export default function ContactRow({ contact, remove }) {
+  if (!contact) return <div></div>; //satisfy Next build process
   // return table row
   return (
     <tr>
-      <td>{contact.name}</td>
+      <td>{contact.name || ""}</td>
       <td>{contact.email}</td>
       <td style={{ padding: 0, display: "flex", justifyContent: "center" }}>
         <button className="button is-danger" onClick={remove}>
