@@ -11,7 +11,10 @@ To install and run this code, you need to have the following dependency programs
 2. NodeJS v14: https://nodejs.org/en/download/
 
 Now you can set-up our software.
-1. Download the source code from https://github.com/just1ngray/CSCI3428/archive/master.zip, or `git clone https://github.com/just1ngray/CSCI3428.git`
+1. Download the source code from https://github.com/just1ngray/CSCI3428/archive/master.zip, or `git clone https://github.com/just1ngray/CSCI3428.git`  
+  
+a) UNTIL WE PUSH TO MASTER, YOU'LL STILL HAVE TO `git checkout development` and `git pull` here
+  
 2. Open a terminal window in the [unzipped] folder and type: `npm run install-all`. This may take a while depending on your internet connection speed.
 3. Now everything is installed and you can run the website using `node index.js`. However, the website will only run as long as you keep the terminal open, so continue on to step 4 (if you have sudo privileges), or step 5 (if you don't have sudo privileges).
 4. With sudo privileges, type `sudo npm install -g pm2`. Then to run the website, `pm2 start index.js --name "email-app"`. Once you've initially added the `index.js` file to pm2's watchlist, you can:  
