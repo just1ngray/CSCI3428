@@ -6,18 +6,34 @@
  */
 import React from "react";
 
-export default function ContactRow({ contact, remove }) {
+export default function ContactRow({ contact, remove, isHeader = false }) {
   if (!contact) return <div></div>; //satisfy Next build process
-  // return table row
+  const rowItem = {
+    display: "inline-block",
+    width: "50%",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    fontWeight: isHeader ? "bold" : "normal",
+  };
+
   return (
-    <tr>
-      <td>{contact.name || ""}</td>
-      <td>{contact.email}</td>
-      <td style={{ padding: 0, display: "flex", justifyContent: "center" }}>
+    <div
+      style={{
+        width: "100%",
+        backgroundColor: "#eee",
+        padding: "0.25em",
+        display: "flex",
+        alignItems: "center",
+      }}
+      className="auto-test-selector-contactrow"
+    >
+      <div style={rowItem}>{contact.name}</div>
+      <div style={rowItem}>{contact.email}</div>
+      {isHeader ? null : (
         <button className="button is-danger" onClick={remove}>
           X
         </button>
-      </td>
-    </tr>
+      )}
+    </div>
   );
 }

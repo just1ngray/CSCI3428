@@ -45,6 +45,18 @@ router.post("/contact", auth, async (req, res) => {
     };
     if (contactAcc) contact.account = contactAcc._id;
 
+    let index = -1;
+    account.contacts.forEach((c, i) => {
+      if (c.email.toLowerCase() === contact.email.toLowerCase()) {
+        index = i;
+        return;
+      }
+    });
+    if (index !== -1) {
+      res.status(400).send("That email already exists in your address book");
+      return;
+    }
+
     account.contacts.push(contact);
     account.markModified("contacts");
     await account.save();

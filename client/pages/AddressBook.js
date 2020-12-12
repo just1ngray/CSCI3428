@@ -11,7 +11,7 @@ import defaults from "../utils/defaults";
 import PageTitle from "./components/PageTitle";
 import Layout from "./components/Layout";
 import CustomButton from "./components/CustomButton";
-import ContactList from "./components/ContactRow";
+import ContactRow from "./components/ContactRow";
 
 export default function AddressBook() {
   const [contacts, setContacts] = useState([]);
@@ -107,6 +107,8 @@ export default function AddressBook() {
               value={name || ""}
               onChange={(e) => setName(e.target.value)}
               placeholder="Contact's Name"
+              maxLength={128}
+              name="contactName"
             />
           </div>
         </div>
@@ -119,6 +121,8 @@ export default function AddressBook() {
               value={email || ""}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Contact's Email"
+              maxLength={256}
+              name="contactEmail"
             />
           </div>
         </div>
@@ -132,25 +136,17 @@ export default function AddressBook() {
           />
         </div>
         <div>
-          <br />
-          <table className="table is-bordered is-hoverable is-fullwidth">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Delete</th>
-              </tr>
-            </thead>
-            <tbody>
-              {contacts.map((c) => (
-                <ContactList
-                  key={`${c.name};${c.email}`}
-                  contact={c}
-                  remove={() => deleteContact(`${c.email}`)}
-                />
-              ))}
-            </tbody>
-          </table>
+          <ContactRow
+            isHeader={true}
+            contact={{ name: "Name", email: "Email" }}
+          />
+          {contacts.map((c) => (
+            <ContactRow
+              key={`${c.name};${c.email}`}
+              contact={c}
+              remove={() => deleteContact(`${c.email}`)}
+            />
+          ))}
         </div>
       </Layout>
     </div>
