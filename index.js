@@ -1,6 +1,6 @@
 /**
  * Set up Express server to handle calls to our database.
- * @author Justin Gray (A00426753)
+ * @author Justin Gray (A00426753) - everything
  */
 const express = require("express");
 const app = express();
@@ -16,15 +16,15 @@ app.use(express.json());
 console.log("Starting...");
 
 // serve the pre-built & exported next files
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// logger: remove after we figure out the refresh issue
+// serve the Page.html files manually
 app.use((req, res, next) => {
-  console.log("Request for:\t" + req.url);
-  next();
+  // if req.url is of the form /PageName
+  if (/^\/[^\/]+$/.test(req.url)) {
+    res.sendFile(`${__dirname}/client/out${req.url}.html`);
+  } else next();
 });
-app.use(/^[^\/]*\/[^\/]*\/?$/, express.static("client/out")); // page i.e. "/SentItems"
-app.use(express.static("client/out")); // page content "/_next/static/css/062d669da3164933341d.css"
-////////////////////////////////////////////////////////////////////////////////////////////////////
+// serve the static page content automatically
+app.use(express.static("client/out"));
 
 // startup functions
 require("./startup/routes")(app); // setup '/api' routes
