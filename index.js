@@ -15,6 +15,17 @@ app.use(express.json());
 
 console.log("Starting...");
 
+// serve the pre-built & exported next files
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// logger: remove after we figure out the refresh issue
+app.use((req, res, next) => {
+  console.log("Request for:\t" + req.url);
+  next();
+});
+app.use(/^[^\/]*\/[^\/]*\/?$/, express.static("client/out")); // page i.e. "/SentItems"
+app.use(express.static("client/out")); // page content "/_next/static/css/062d669da3164933341d.css"
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // startup functions
 require("./startup/routes")(app); // setup '/api' routes
 require("./startup/database")
@@ -22,19 +33,6 @@ require("./startup/database")
   .then((didConnect) => {
     if (didConnect) {
       require("./startup/setupAccounts")();
-
-      /**
-       * Redirect any non-api requests to the front-end NextJS
-       * optimized server.
-       * NextJS can be run with:
-       *      $ npm run build
-       *      $ npm run client
-       * And will be started on port 3384.
-       * @author Justin Gray (A00426753)
-       */
-      app.get("*", (req, res) => {
-        res.redirect(301, `${req.hostname}:3384${req.url}`);
-      });
 
       app.listen(port, (err) => {
         if (err) throw err;
