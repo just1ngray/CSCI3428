@@ -19,8 +19,10 @@ console.log("Starting...");
 // serve the Page.html files manually
 app.use((req, res, next) => {
   // if req.url is of the form /PageName
-  if (/^\/[^\/]+$/.test(req.url)) {
-    res.sendFile(`${__dirname}/client/out${req.url}.html`);
+  if (/^\/[^\/\.]+$/.test(req.url)) {
+    res.sendFile(`${__dirname}/client/out${req.url}.html`, () => {
+      res.sendFile(`${__dirname}/client/out/404.html`);
+    });
   } else next();
 });
 // serve the static page content automatically
