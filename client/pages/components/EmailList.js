@@ -4,7 +4,6 @@
  *
  * @author Nicholas Morash (A00378981)
  * @author Bivash Pandey (A00425523) - search bar and its filter functionality
- *                       and fetching user settings from a local storage
  * @author Justin Gray (A00426753) - pagination functionality
  */
 
