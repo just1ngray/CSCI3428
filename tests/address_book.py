@@ -104,3 +104,4 @@ assert rowIndex == -1, "ERROR: Contact was not deleted from the backend!"
 
 print("All tests passed! Closing the testing window in 5 seconds...")
 time.sleep(5)
+driver.close()
