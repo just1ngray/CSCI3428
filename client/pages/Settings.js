@@ -31,7 +31,7 @@ export default function Settings() {
   }, []);
 
   function saveSettings() {
-    // if user apply changes by selecting any one (theme of email)
+    // if user apply changes by selecting any one (theme or email)
     // then use the unchanged one from the previous user setting
     if (color.length === 0) setColor(prevSettings.color);
     if (numEmail.length === 0) setNumEmail(prevSettings.numEmail);
