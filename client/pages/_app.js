@@ -68,12 +68,16 @@ function MyApp({ Component, pageProps }) {
 
       <footer className="container" style={{ textAlign: "center" }}>
         <span
+          style={{ cursor: "pointer" }}
           onClick={() => window.open("https://github.com/just1ngray/CSCI3428")}
         >
           Open Source Software
         </span>
         &nbsp;Developed in CSCI 3428 at&nbsp;
-        <span onClick={() => window.open("http://cs.smu.ca")}>
+        <span
+          style={{ cursor: "pointer" }}
+          onClick={() => window.open("http://cs.smu.ca")}
+        >
           Saint Mary's University
         </span>
         <p>Fall 2020</p>
