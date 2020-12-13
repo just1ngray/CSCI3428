@@ -100,6 +100,9 @@ export default function Layout({ children, title = "Email App" }) {
                 >
                   <Link href="/">Logout</Link>
                 </span>
+                <span className="navbar-item">
+                  <Link href="/Settings">Settings</Link>
+                </span>
               </div>
             </div>
           </div>

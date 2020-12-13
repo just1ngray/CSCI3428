@@ -4,6 +4,7 @@
  *
  * @author Nicholas Morash (A00378981)
  * @author Bivash Pandey (A00425523) - search bar and its filter functionality
+ *                       and fetching user settings from a local storage
  * @author Justin Gray (A00426753) - pagination functionality
  */
 
@@ -14,7 +15,7 @@ import defaults from "../../utils/defaults";
 import filterEmails from "../../utils/filterEmails";
 import Pagination from "./Pagination";
 
-const EMAILS_PER_PAGE = 20;
+let EMAILS_PER_PAGE = 20;
 
 /**
  * This component retrieves and renders a list of emails.
@@ -25,6 +26,19 @@ export default function EmailList({ isSentPage }) {
   const [showEmailIndices, setShowEmailIndices] = useState([]);
   const [searchVal, setSearchVal] = useState("");
   const [pageNum, setPageNum] = useState(1); // 1 indexed
+  const [settings, setSettings] = useState({});
+
+  // get the settings from the local storage
+  useEffect(() => {
+    const userSettings = localStorage.getItem("settings");
+    if (userSettings) setSettings(JSON.parse(userSettings));
+  }, []);
+
+  // If user has selected number of emails in a page,
+  // replace the default with user selected value
+  EMAILS_PER_PAGE = settings["numEmail"]
+    ? parseInt(settings.numEmail)
+    : EMAILS_PER_PAGE;
 
   useEffect(() => {
     setShowEmailIndices(filterEmails(emails, searchVal));
