@@ -33,7 +33,10 @@ axios.interceptors.response.use(
  */
 function MyApp({ Component, pageProps }) {
   // Bivash Pandey (A00425523) - Start
-  const [settings, setSettings] = useState({});
+  const [settings, setSettings] = useState({
+    color: "#64b5f6",
+    numEmail: 20,
+  });
   // get the user settings from local storage
   useEffect(() => {
     const userSettings = localStorage.getItem("settings");
@@ -53,7 +56,7 @@ function MyApp({ Component, pageProps }) {
       />
       <section className="section">
         <div className="container">
-          <Component {...pageProps} />
+          <Component {...pageProps} settings={settings} />
         </div>
       </section>
     </div>
