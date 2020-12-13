@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 import Layout from "./components/Layout";
 import EmailList from "./components/EmailList";
 
-export default function Inbox() {
+export default function Inbox({ settings }) {
   const router = useRouter();
 
   //Routes to given route
@@ -24,7 +24,7 @@ export default function Inbox() {
       <PageTitle title="INBOX ITEMS" />
 
       {/* List of EmailHeader components. */}
-      <EmailList isSentPage={false} />
+      <EmailList isSentPage={false} pageSize={settings.numEmail} />
       <br />
 
       {/* Input, Compose and Help Button*/}

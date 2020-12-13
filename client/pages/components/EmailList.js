@@ -14,13 +14,11 @@ import defaults from "../../utils/defaults";
 import filterEmails from "../../utils/filterEmails";
 import Pagination from "./Pagination";
 
-const EMAILS_PER_PAGE = 20;
-
 /**
  * This component retrieves and renders a list of emails.
  * @props isSentPage    boolean, true if emails are sent mails
  */
-export default function EmailList({ isSentPage }) {
+export default function EmailList({ isSentPage, pageSize }) {
   const [emails, setEmails] = useState([]);
   const [showEmailIndices, setShowEmailIndices] = useState([]);
   const [searchVal, setSearchVal] = useState("");
@@ -87,9 +85,7 @@ export default function EmailList({ isSentPage }) {
     content = [];
     emails
       .filter((email, index) => showEmailIndices.includes(index))
-      .filter(
-        (email, index) => Math.floor(index / EMAILS_PER_PAGE) + 1 == pageNum
-      )
+      .filter((email, index) => Math.floor(index / pageSize) + 1 == pageNum)
       .forEach((email) => {
         content.push(
           <EmailHeader
@@ -119,12 +115,12 @@ export default function EmailList({ isSentPage }) {
       <br />
 
       <div className="box" style={{ marginBottom: 1 }}>
-        <p>{content}</p>
+        {content}
       </div>
 
-      {showEmailIndices.length <= EMAILS_PER_PAGE ? null : (
+      {showEmailIndices.length <= pageSize ? null : (
         <Pagination
-          itemsPerPage={EMAILS_PER_PAGE}
+          itemsPerPage={pageSize}
           numItems={showEmailIndices.length}
           setPage={setPageNum}
           currentPage={pageNum}

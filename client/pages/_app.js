@@ -1,10 +1,13 @@
 /**
  * This is a react file which will loads first
  *
- * @author
+ * @author:
+ * @author Bivash Pandey (A00425523) - Load settings from local storage, apply new theme
+ *
  */
 
 //import all the CSS files
+import React, { useState, useEffect } from "react";
 import "../styles/globals.css";
 import "../styles/bulma.css";
 import "tippy.js/dist/tippy.css";
@@ -29,8 +32,22 @@ axios.interceptors.response.use(
  * @param {*} pageProps
  */
 function MyApp({ Component, pageProps }) {
+  // Bivash Pandey (A00425523) - Start
+  const [settings, setSettings] = useState({
+    color: "#64b5f6",
+    numEmail: 20,
+  });
+  // get the user settings from local storage
+  useEffect(() => {
+    const userSettings = localStorage.getItem("settings");
+    if (userSettings) setSettings(JSON.parse(userSettings));
+  }, []);
+
+  let color = settings["color"] ? settings.color : "#64b5f6";
+  // Bivash Pandey (A00425523) - End
+
   return (
-    <div style={{ backgroundColor: "#a2bdbc", height: "100vh" }}>
+    <div style={{ backgroundColor: color, height: "100vh" }}>
       <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css"
@@ -39,7 +56,7 @@ function MyApp({ Component, pageProps }) {
       />
       <section className="section">
         <div className="container">
-          <Component {...pageProps} />
+          <Component {...pageProps} settings={settings} />
         </div>
       </section>
     </div>

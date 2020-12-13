@@ -1,0 +1,50 @@
+/**
+* This page contains the custom button styling and colouring used in settings page
+* 
+* @author: Bivash Pandey (A00425523)
+**/
+
+.button {
+  background-color: #64b5f6;
+  border-color: #dbdbdb;
+  border-width: 1px;
+  color: #363636;
+  cursor: pointer;
+  justify-content: center;
+  padding-bottom: calc(0.5em - 1px);
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-top: calc(0.5em - 1px);
+  text-align: center;
+  white-space: nowrap;
+  height: 3em;
+  width: 3em;
+}
+
+.button1 {
+  background-color: #64b5f6;
+}
+
+.button2 {
+  background-color: #f186c0;
+}
+
+.button3 {
+  background-color: #ffab91;
+}
+
+.button4 {
+  background-color: #a5d6a7;
+}
+
+.button5 {
+  background-color: #5c6bc0;
+}
+
+.button6 {
+  background-color: #9575cd;
+}
+
+.button7 {
+  background-color: #ffc77d;
+}
