@@ -110,8 +110,6 @@ export default function Layout({ children, title = "Email App" }) {
       </header>
 
       {children}
-
-      <footer>{"IN DEVELOPMENT - PROTOTYPE BUILD 4"}</footer>
     </div>
   );
 }
