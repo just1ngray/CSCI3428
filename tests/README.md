@@ -7,7 +7,8 @@
     a. `git clone https://github.com/just1ngray/CSCI3428.git`  
     b. `npm run install-all`  
     c. `node index.js` and `npm run dev` in two separate terminal windows
-4. From the `./tests` directory, run `python ./<test file name>.py`
+4. From the `./tests` directory, run `python ./<test file name>.py`  
+    > Tests are expected to run in desktop mode where the navigation bar is wide (not hamburger button). Please ensure your testing browser window is sufficiently wide to display the navigation buttons without the hamburger.
 
 #### Instructions for group members
 
