@@ -102,12 +102,13 @@ export default function Compose() {
 
   return (
     <Layout>
+      <br />
       {/*page title*/}
       <div>
-        <PageTitle title={`COMPOSING MESSAGE`} />{" "}
-        {/* is user_id the from._id */}
+        <PageTitle title= "COMPOSE EMAIL" />
       </div>
-
+      <br />
+      
       {/*div for email fields */}
       <div>
         <AutoCompleteText label="To" placeholder="" />

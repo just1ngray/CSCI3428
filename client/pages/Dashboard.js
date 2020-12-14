@@ -10,6 +10,7 @@ import axios from "axios";
 import defaults from "../utils/defaults";
 import DashboardStudent from "./components/DashboardStudent";
 import DashboardForm from "./components/DashboardForm";
+import PageTitle from "./components/PageTitle";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -92,6 +93,11 @@ export default function Dashboard() {
 
   return (
     <Layout>
+      <br />
+      <div>
+        <PageTitle title="DASHBOARD" />
+      </div>
+      <br />
       <strong>Managed Students:</strong>
       {content}
       <hr />

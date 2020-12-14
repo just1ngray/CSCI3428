@@ -37,7 +37,7 @@ module.exports = async function verifyAccounts() {
 
   // either 1 or both DNE = 3 cases
   if (!specialistAcc && !studentAcc) {
-    createSpecialist(newSpecialistAccID, newSpecialistID, newStudentAccID);
+    createSpecialist(newSpecialistAccID, newSpecialistID, newStudentID);
     createStudent(newStudentAccID, newStudentID, newSpecialistID);
   } else if (!specialistAcc && studentAcc) {
     const stud = await Student.findOne({ _id: studentAcc.child_id });
