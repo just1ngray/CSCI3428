@@ -21,7 +21,11 @@ export default function Inbox({ settings }) {
 
   return (
     <Layout>
-      <PageTitle title="INBOX ITEMS" />
+      <br />
+      <div>
+        <PageTitle title="INBOX ITEMS" />
+      </div>
+      <br />
 
       {/* List of EmailHeader components. */}
       <EmailList isSentPage={false} pageSize={settings.numEmail} />

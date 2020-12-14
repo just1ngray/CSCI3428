@@ -132,10 +132,11 @@ export default function Reply() {
 
   return (
     <Layout>
+      <br />
       <div>
-        <PageTitle title={`COMPOSING ${"REPLY"}`} />{" "}
-        {/* is user_id the from._id */}
+        <PageTitle title="COMPOSE REPLY" />
       </div>
+      <br />
       <div>
         <TextBox label="To" rows="1" text={formatTo()} />
         <InputTextBox label="CC" rows="1" text="" />

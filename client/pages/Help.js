@@ -8,6 +8,7 @@ import Layout from "./components/Layout";
 import { useRouter } from "next/router";
 import CustomButton from "./components/CustomButton";
 import Accordion from "./components/Accordion";
+import PageTitle from "./components/PageTitle";
 /**
  * This function displays a help page
  */
@@ -23,6 +24,11 @@ export default function Help() {
 
   return (
     <Layout>
+      <br />
+      <div>
+        <PageTitle title="HELP" />
+      </div>
+      <br />
       <h1 className="title">General Emailing Questions</h1>
       <div>
         <Accordion

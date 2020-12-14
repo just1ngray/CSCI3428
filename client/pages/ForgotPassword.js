@@ -8,6 +8,7 @@ import defaults from "../utils/defaults";
 import QuestionManager from "./components/QuestionManager";
 import CustomButton from "./components/CustomButton";
 import { useRouter } from "next/router";
+import PageTitle from "./components/PageTitle";
 
 export default function ForgotPassword() {
   const router = useRouter();
@@ -74,6 +75,11 @@ export default function ForgotPassword() {
 
   return (
     <div>
+      <br />
+      <div>
+        <PageTitle title="RESET PASSWORD" />
+      </div>
+      <br />
       <div>
         <label>Email of your account:</label>
         <input

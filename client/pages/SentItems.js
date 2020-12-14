@@ -21,8 +21,11 @@ export default function SentItems({ settings }) {
 
   return (
     <Layout>
-      <PageTitle title="SENT ITEMS" />
-
+      <br />
+      <div>
+        <PageTitle title="SENT ITEMS" />
+      </div>
+      <br />
       {/* List of EmailHeader components. */}
       <EmailList isSentPage={true} pageSize={settings.numEmail} />
       <br />

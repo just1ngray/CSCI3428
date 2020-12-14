@@ -46,9 +46,11 @@ export default function Email({ userAuthor }) {
 
   return (
     <div>
+      <br />
       <div>
-        <PageTitle title="VIEWING EMAIL" />
+        <PageTitle title="VIEW EMAIL" />
       </div>
+      <br />
       <div>
         <TextBox
           label="From"

@@ -103,7 +103,7 @@ export default function EmailList({ isSentPage, pageSize }) {
     <div>
       <p className="control has-icons-left">
         <input
-          className="input is-Large"
+          className="input is-large"
           value={searchVal}
           onChange={(e) => setSearchVal(e.target.value)}
           placeholder="Search mail"
