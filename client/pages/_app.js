@@ -33,7 +33,7 @@ axios.interceptors.response.use(
 function MyApp({ Component, pageProps }) {
   // Bivash Pandey (A00425523) - Start
   const [settings, setSettings] = useState({
-    color: "#64b5f6",
+    color: "#a5d6a7",
     numEmail: 20,
   });
   // get the user settings from local storage
@@ -42,7 +42,7 @@ function MyApp({ Component, pageProps }) {
     if (userSettings) setSettings(JSON.parse(userSettings));
   }, []);
 
-  let color = settings["color"] ? settings.color : "#64b5f6";
+  let color = settings["color"] ? settings.color : "#a5d6a7";
   // Bivash Pandey (A00425523) - End
 
   return (
