@@ -46,9 +46,11 @@ export default function Email({ userAuthor }) {
 
   return (
     <div>
+      <br />
       <div>
-        <PageTitle title="VIEWING EMAIL" />
+        <PageTitle title="VIEW EMAIL" />
       </div>
+      <br />
       <div>
         <TextBox
           label="From"
@@ -66,27 +68,26 @@ export default function Email({ userAuthor }) {
         <TextBox label="Subject" rows="1" text={email.subject} />
         <TextBox label="Body" rows="10" text={email.body} />
       </div>
-      <div>
-        <span>
-          <CustomButton
-            label="Reply"
-            onClick={() => handleRouteClick("/Reply")}
-            type="button"
-            disabled={false}
-          />
-          <CustomButton
-            label="Back"
-            onClick={() => handleBackClick()}
-            type="button"
-            disabled={false}
-          />
-          <CustomButton
-            label="Help"
-            onClick={() => handleRouteClick("/Help")}
-            type="button"
-            disabled={false}
-          />
-        </span>
+      <br />
+      <div className="buttons">
+        <CustomButton
+          label="Reply"
+          onClick={() => handleRouteClick("/Reply")}
+          type="button"
+          disabled={false}
+        />
+        <CustomButton
+          label="Back"
+          onClick={() => handleBackClick()}
+          type="button"
+          disabled={false}
+        />
+        <CustomButton
+          label="Help"
+          onClick={() => handleRouteClick("/Help")}
+          type="button"
+          disabled={false}
+        />
       </div>
     </div>
   );

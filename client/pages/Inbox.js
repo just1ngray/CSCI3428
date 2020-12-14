@@ -21,14 +21,18 @@ export default function Inbox({ settings }) {
 
   return (
     <Layout>
-      <PageTitle title="INBOX ITEMS" />
+      <br />
+      <div>
+        <PageTitle title="INBOX ITEMS" />
+      </div>
+      <br />
 
       {/* List of EmailHeader components. */}
       <EmailList isSentPage={false} pageSize={settings.numEmail} />
       <br />
 
       {/* Input, Compose and Help Button*/}
-      <span>
+      <div className="buttons">
         <CustomButton
           label="Sent Items"
           onClick={() => handleRouteClick("/SentItems")}
@@ -47,7 +51,7 @@ export default function Inbox({ settings }) {
           type="button"
           disabled={false}
         />
-      </span>
+      </div>
     </Layout>
   );
 }

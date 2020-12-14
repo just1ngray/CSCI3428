@@ -21,14 +21,17 @@ export default function SentItems({ settings }) {
 
   return (
     <Layout>
-      <PageTitle title="SENT ITEMS" />
-
+      <br />
+      <div>
+        <PageTitle title="SENT ITEMS" />
+      </div>
+      <br />
       {/* List of EmailHeader components. */}
       <EmailList isSentPage={true} pageSize={settings.numEmail} />
       <br />
 
       {/* Input, Compose and Help Button*/}
-      <span>
+      <div className="buttons">
         <CustomButton
           label="Inbox"
           onClick={() => handleRouteClick("/Inbox")}
@@ -47,7 +50,7 @@ export default function SentItems({ settings }) {
           type="button"
           disabled={false}
         />
-      </span>
+      </div>
     </Layout>
   );
 }
