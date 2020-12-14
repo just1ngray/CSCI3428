@@ -28,9 +28,9 @@ export default function Layout({ children, title = "Email App" }) {
 
   const dashboardJSX =
     accountType !== "specialist" ? null : (
-      <a className="navbar-item">
+      <span className="navbar-item">
         <Link href="/Dashboard">Dashboard</Link>
-      </a>
+      </span>
     );
 
   return (
