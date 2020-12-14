@@ -12,6 +12,7 @@ URL = "http://localhost:3000"
 
 #           ---[ LOGIN TO THE WEBSITE ]---
 driver.get(URL)
+driver.set_window_size(1280, 720)
 driver.find_element_by_name("name").send_keys("tester@autismns.ca")
 driver.find_element_by_name("password").send_keys("password")
 driver.find_element_by_tag_name("button").click()
