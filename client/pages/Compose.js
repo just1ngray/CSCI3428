@@ -105,7 +105,7 @@ export default function Compose() {
       <br />
       {/*page title*/}
       <div>
-        <PageTitle title= "COMPOSE EMAIL"} />
+        <PageTitle title= "COMPOSE EMAIL" />
       </div>
       <br />
       
