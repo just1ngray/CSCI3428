@@ -49,7 +49,7 @@ function MyApp({ Component, pageProps }) {
     <div
       style={{
         backgroundColor: color,
-        height: "100vh",
+        minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
       }}
