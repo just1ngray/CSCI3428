@@ -2,7 +2,7 @@
  * This files contains the component which splits the body of the email in
  * three parts
  *
- * @author
+ * @author Nicholas Morash (A00378981)
  */
 import React from "react";
 import InputTextBox from "./InputTextBox";
