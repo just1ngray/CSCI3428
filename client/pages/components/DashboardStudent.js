@@ -5,6 +5,7 @@
 import React from "react";
 
 export default function DashboardStudent({ student, remove }) {
+  if (!student) return <div></div>; // satisfy Next Build process
   return (
     <div
       style={{

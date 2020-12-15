@@ -28,9 +28,9 @@ export default function Layout({ children, title = "Email App" }) {
 
   const dashboardJSX =
     accountType !== "specialist" ? null : (
-      <a className="navbar-item">
+      <span className="navbar-item">
         <Link href="/Dashboard">Dashboard</Link>
-      </a>
+      </span>
     );
 
   return (
@@ -77,20 +77,20 @@ export default function Layout({ children, title = "Email App" }) {
             <div className="navbar-end">
               <div className="navbar-item">
                 {dashboardJSX}
-                <a className="navbar-item">
+                <span className="navbar-item">
                   <Link href="/Inbox">Inbox</Link>
-                </a>
-                <a className="navbar-item">
+                </span>
+                <span className="navbar-item">
                   <Link href="/Compose">Compose</Link>
-                </a>
-                <a className="navbar-item">
+                </span>
+                <span className="navbar-item">
                   <Link href="/SentItems">Sent Mail</Link>
-                </a>
-                <a className="navbar-item">
+                </span>
+                <span className="navbar-item">
                   <Link href="/AddressBook">Address Book</Link>
-                </a>
+                </span>
                 {/*clearing localStorage when logging out */}
-                <a
+                <span
                   className="navbar-item"
                   onClick={() => {
                     console.log("Clearing localStorage");
@@ -99,7 +99,10 @@ export default function Layout({ children, title = "Email App" }) {
                   }}
                 >
                   <Link href="/">Logout</Link>
-                </a>
+                </span>
+                <span className="navbar-item">
+                  <Link href="/Settings">Settings</Link>
+                </span>
               </div>
             </div>
           </div>
@@ -107,8 +110,6 @@ export default function Layout({ children, title = "Email App" }) {
       </header>
 
       {children}
-
-      <footer>{"IN DEVELOPMENT - PROTOTYPE BUILD 4"}</footer>
     </div>
   );
 }

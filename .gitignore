@@ -27,3 +27,6 @@ client/.env.production.local
 
 # vercel
 client/.vercel
+
+# tests
+tests/chromedriver

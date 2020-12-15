@@ -13,6 +13,8 @@ import defaults from "../../utils/defaults";
 import axios from "axios";
 
 export default function EmailHeader({ isViewerSender, email, remove, flag }) {
+  if (!email) return <div></div>; // satisfy NextJS build process
+
   const router = useRouter();
 
   let author = "";
@@ -84,7 +86,7 @@ export default function EmailHeader({ isViewerSender, email, remove, flag }) {
     <div
       style={{
         display: "flex",
-        marginBottom: "1px"
+        marginBottom: "1px",
       }}
     >
       <button

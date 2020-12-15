@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 import Layout from "./components/Layout";
 import EmailList from "./components/EmailList";
 
-export default function SentItems() {
+export default function SentItems({ settings }) {
   const router = useRouter();
 
   //Routes to given route
@@ -21,14 +21,17 @@ export default function SentItems() {
 
   return (
     <Layout>
-      <PageTitle title="SENT ITEMS" />
-
+      <br />
+      <div>
+        <PageTitle title="SENT ITEMS" />
+      </div>
+      <br />
       {/* List of EmailHeader components. */}
-      <EmailList isSentPage={true} />
+      <EmailList isSentPage={true} pageSize={settings.numEmail} />
       <br />
 
       {/* Input, Compose and Help Button*/}
-      <span>
+      <div className="buttons">
         <CustomButton
           label="Inbox"
           onClick={() => handleRouteClick("/Inbox")}
@@ -47,7 +50,7 @@ export default function SentItems() {
           type="button"
           disabled={false}
         />
-      </span>
+      </div>
     </Layout>
   );
 }

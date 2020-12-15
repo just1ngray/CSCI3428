@@ -1,7 +1,7 @@
 /**
  * This file displays a reply page with cc, subject, and body section
  *
- * @author
+ * @author Nicholas Morash
  */
 import React, { useState, useEffect } from "react";
 import store from "../store";
@@ -22,7 +22,17 @@ export default function Reply() {
   const [email, setEmail] = useState({});
 
   useEffect(() => {
+    ["Subject", "To", "CC", "Body", "Greeting", "Message", "Closing"].forEach(
+      (stateFieldName) => {
+        store.dispatch({
+          type: `set${stateFieldName}`,
+          payload: " ",
+        });
+      }
+    );
+
     const e = JSON.parse(localStorage.getItem("emailData"));
+    if (!e) router.push("/Inbox");
     setEmail(e);
     console.log(e);
   }, []);
@@ -81,15 +91,14 @@ export default function Reply() {
     const jwt = localStorage.getItem("token");
 
     const payload = {
-      subject: `${storeState.subText}`,
-      body: `${storeState.bodyText}`,
+      subject: `${storeState.subText} `,
+      body: `${storeState.bodyText} `,
       from: undefined, // use account's default identity according to the JWT
       to: [{ email: email.from.email }],
-      cc: [],
+      cc: [{ email: `${storeState.ccText}` }],
       bcc: [],
     };
 
-    console.log(storeState);
     console.log(payload);
 
     axios
@@ -119,14 +128,15 @@ export default function Reply() {
     router.push(route);
   }
 
-  if (email.body === undefined) return <div></div>; //internal bleed: bandaid fix
+  if (!email || !email.body) return <div></div>; //internal bleed: bandaid fix
 
   return (
     <Layout>
+      <br />
       <div>
-        <PageTitle title={`COMPOSING ${"REPLY"}`} />{" "}
-        {/* is user_id the from._id */}
+        <PageTitle title="COMPOSE REPLY" />
       </div>
+      <br />
       <div>
         <TextBox label="To" rows="1" text={formatTo()} />
         <InputTextBox label="CC" rows="1" text="" />

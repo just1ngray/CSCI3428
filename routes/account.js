@@ -36,6 +36,11 @@ router.get("/contacts", auth, (req, res) => {
  * @author Justin Gray (A00426573)
  */
 router.post("/contact", auth, async (req, res) => {
+  if (!req.body.email || req.body.email.length === 0) {
+    res.status(400).send("Cannot create a contact without an email address");
+    return;
+  }
+
   const account = req.auth.account;
   try {
     const contactAcc = await Account.findOne({ email: req.body.email });
@@ -44,6 +49,18 @@ router.post("/contact", auth, async (req, res) => {
       email: req.body.email,
     };
     if (contactAcc) contact.account = contactAcc._id;
+
+    let index = -1;
+    account.contacts.forEach((c, i) => {
+      if (c.email.toLowerCase() === contact.email.toLowerCase()) {
+        index = i;
+        return;
+      }
+    });
+    if (index !== -1) {
+      res.status(400).send("That email already exists in your address book");
+      return;
+    }
 
     account.contacts.push(contact);
     account.markModified("contacts");
