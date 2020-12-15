@@ -1,7 +1,7 @@
 /**
  * This file initializes a button along with it's properties
  *
- * @author
+ * @author Bivash Pandey (A00425523)
  */
 
 import React from "react";
