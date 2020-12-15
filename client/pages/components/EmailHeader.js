@@ -3,7 +3,7 @@
  * OnClick will redirect to ViewEmail with emailID
  * @author Nicholas Morash (A00378981) - initial implementation
  * @author Justin Gray (A00426753) - styling, flags, and deleting
- * @author Jay Patel (A00433907) - Responsiveness
+ * @author Jay Patel (A00433907) - Responsiveness of page
  */
 
 import React from "react";

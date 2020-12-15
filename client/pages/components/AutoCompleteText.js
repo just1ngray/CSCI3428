@@ -2,7 +2,8 @@
  * This file contains a component that generates input text box with autocomplete feature
  * Moreover, it validates if the inputted or selected email is valid
  *
- * Bivash Pandey (A00425523)
+ * @author Bivash Pandey (A00425523)
+ * @author Jay Patel (A00433907) Hovering labels (Tippy)
  */
 import React, { useState, useEffect } from "react";
 import CreatableSelect from "react-select/creatable";
@@ -132,6 +133,7 @@ export default function AutoCompleteText({ label, placeholder }) {
   /**
    * This function retuns the help string
    * @param {String} helpType word to be passed in switch statement
+   * @author Jay Patel (A00433907)
    */
   function handleHelp(helpType) {
     switch (helpType) {
