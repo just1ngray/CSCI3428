@@ -78,7 +78,10 @@ export default function Compose({ settings }) {
     router.back();
   }
 
-  /* handles the click on checkboxes */
+  /**
+   * Handles the click on checkboxes
+   * @author Jay Patel (A00433907)
+   */
   function handleCheckClick(event, label) {
     const copyChecked = [...checked];
     if (event.target.checked) {
@@ -90,7 +93,10 @@ export default function Compose({ settings }) {
     setChecked(copyChecked);
   }
 
-  /*message to be shown when atleast one checkbox is unchecked */
+  /**
+   * Message to be shown when atleast one checkbox is unchecked
+   * @author Jay Patel (A00433907)
+   */
   let errMsg = "";
   if (!checked.includes("to")) {
     errMsg = "Remember to check the to box!";

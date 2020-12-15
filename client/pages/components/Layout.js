@@ -3,7 +3,7 @@
  *
  * @author Nicholas Morash (A00378981)
  * @author Justin Gray (A00426753): re-vamped styling
- * @author Jay Patel (A00433907)
+ * @author Jay Patel (A00433907) Navbar and it's resposiveness
  */
 
 // import Link to enable Routing

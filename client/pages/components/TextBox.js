@@ -1,7 +1,6 @@
 /**
  * This file contains a component that generates input text box with different properties
  *
- * @author:
  */
 
 import Tippy from "@tippy.js/react";
@@ -17,6 +16,7 @@ function TextBox({ label, rows, text }) {
    * This function displays a dialog box when hovering over labels
    *
    * @param {String} helpType word to be passed in switch statement
+   * @author Jay Patel (A00433907)
    */
   function handleHelp(helpType) {
     switch (helpType) {

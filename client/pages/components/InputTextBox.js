@@ -2,7 +2,7 @@
  * This file contains a component that generates input text box with different properties
  * And it checks if email is valid; input is non-empty, if it's empty - it will display red box
  *
- * Bivash Pandey (A00425523)
+ * @author Bivash Pandey (A00425523)
  */
 import React, { useState, useEffect } from "react";
 import Tippy from "@tippy.js/react";
@@ -47,6 +47,7 @@ export default function InputTextBox({
   /**
    * This function retuns the help string
    * @param {String} helpType word to be passed in switch statement
+   * @author Jay Patel (A00433907)
    */
   function handleHelp(helpType) {
     switch (helpType) {
