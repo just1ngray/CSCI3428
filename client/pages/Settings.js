@@ -40,6 +40,7 @@ export default function Settings() {
       numEmail: numEmail.length === 0 ? prevSettings.numEmail : numEmail,
     };
     setSettings(newSettings);
+
     // saves user settings in the local storage
     localStorage.setItem("settings", JSON.stringify(newSettings));
     // reloads the page to apply the effect
@@ -61,11 +62,11 @@ export default function Settings() {
             <div className="buttons">
               <button
                 className={`${styles.button} ${styles.button1}`}
-                onClick={() => setColor("#64b5f6")}
+                onClick={() => setColor("#81d4fa")}
               />
               <button
                 className={`${styles.button} ${styles.button2}`}
-                onClick={() => setColor("#f186c0")}
+                onClick={() => setColor("#f48fb1")}
               />
               <button
                 className={`${styles.button} ${styles.button3}`}
@@ -77,15 +78,19 @@ export default function Settings() {
               />
               <button
                 className={`${styles.button} ${styles.button5}`}
-                onClick={() => setColor("#5c6bc0")}
+                onClick={() => setColor("#9fa8da")}
               />
               <button
                 className={`${styles.button} ${styles.button6}`}
-                onClick={() => setColor("#9575cd")}
+                onClick={() => setColor("#b39ddb")}
               />
               <button
                 className={`${styles.button} ${styles.button7}`}
-                onClick={() => setColor("#ffc77d")}
+                onClick={() => setColor("#ffcc80")}
+              />
+              <button
+                className={`${styles.button} ${styles.button8}`}
+                onClick={() => setColor("#e0e0e0")}
               />
             </div>
             <p>How many emails do you want to display in a page?</p>

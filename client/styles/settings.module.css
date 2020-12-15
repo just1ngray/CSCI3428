@@ -22,11 +22,11 @@
 }
 
 .button1 {
-  background-color: #64b5f6;
+  background-color: #81d4fa;
 }
 
 .button2 {
-  background-color: #f186c0;
+  background-color: #f48fb1;
 }
 
 .button3 {
@@ -38,13 +38,17 @@
 }
 
 .button5 {
-  background-color: #5c6bc0;
+  background-color: #9fa8da;
 }
 
 .button6 {
-  background-color: #9575cd;
+  background-color: #b39ddb;
 }
 
 .button7 {
-  background-color: #ffc77d;
+  background-color: #ffcc80;
+}
+
+.button8 {
+  background-color: #e0e0e0;
 }
