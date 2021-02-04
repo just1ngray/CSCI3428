@@ -31,3 +31,14 @@ Now you can set-up our software.
 5. Without sudo privileges, you'll have to use nohup:  
     a) `nohup node index > log.out &`, then `exit`  
     b) To stop the website (or refresh after modifying the code), find the PID `ps -ef | grep node` and kill it using `kill -9 <PID>` where <PID> is the PID of the process you want to kill.
+
+# Default Accounts
+You should *not* use these accounts for permanent use. Instead, please:
+1. Create a specialist account, and
+2. Create a (or more) student account(s) within the specialist's dashboard
+
+Account | Username/Email | Password
+--- | --- | ---
+Specialist | specialist@autismns.ca | password
+Student | student@autismns.ca | password
+
